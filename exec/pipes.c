@@ -167,7 +167,7 @@ void	ft_exec_cmd(t_mini *shell)
 	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
 	{
 		//NEED TO REDIR IN OUT
-		//+ DELIM IN FORK
+		//+ << IN FORK
 		//FUCK
 		if (ft_bin(&(shell->env), shell->cmds[0].av, p) == 1)
 			return ;
