@@ -65,6 +65,8 @@ int	ft_env(char **env, char **cmd, t_pipes p)
 	while (env[i])
 	{
 		len = ft_strlen(env[i]);
+		printf("f_in: %d\n", p.f_in);
+		printf("f_out: %d\n", p.f_out);
 		write(p.f_out, env[i], len);
 		write(p.f_out, "\n", 1);
 		i++;

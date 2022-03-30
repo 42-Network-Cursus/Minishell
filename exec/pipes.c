@@ -163,17 +163,16 @@ void	ft_exec_cmd(t_mini *shell)
 	char	*cmd_path;
 
 	
-	ft_bzero(&p, sizeof(t_pipes));
+	ft_bzero(&p, sizeof(t_pipes)); // wat ?
 	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
 	{
 		if (ft_bin(&(shell->env), shell->cmds[0].av, p) == 1)
 			return ;
 	}
-	
-
 	i = -1;
 	while (++i < shell->nb_cmd)
 	{
+		printf("Magic happens && we inside the loop\n");
 		if (i < shell->nb_cmd - 1)
 			pipe(p.new_end);
 		pid = fork();
