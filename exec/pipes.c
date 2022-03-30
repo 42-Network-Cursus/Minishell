@@ -45,30 +45,24 @@ void	ft_exec_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
-#include <string.h>
-#include <errno.h>
-
 int	open_heredoc(t_here *doc)
 {
 	int		fd;
 	char	*input;
 
-	//HANDLE SIGNALS C-c
-
 	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
-//	if (unlink("heredoc"))
-//		ft_exec_error("Unlink");
 	while (1)
 	{
 		input = readline(">");
-		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input))) //ADDED INPUT AS CONDITION, MAKES C-D do \n
+		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input)))
 		{
 			if (doc->next == NULL)
 			{
 				free(input);
 				close(fd);
 				fd = open("heredoc", O_RDONLY, 0666);
-				printf("%s\n", strerror(errno));
+				if (unlink("heredoc"))
+					ft_exec_error("Unlink");intf("%s\n", strerror(errno));
 				
 				return (fd);
 			}
@@ -77,9 +71,6 @@ int	open_heredoc(t_here *doc)
 				doc = doc->next;
 				close(fd);
 				fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
-	//			if (unlink("heredoc"))
-		//			ft_exec_error("Unlink");
-				printf("Got here\n");
 			}
 		}
 		else
@@ -129,24 +120,18 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 	int		ret;
 
 	check_in_out_redir(shell, p, i);
-	printf("f_in child: %d\n", p->f_in);
-	printf("f_out child: %d\n", p->f_out);
 	if (p->f_out != 1)
-		dup2(p->f_out, 1);
+		dup2(p->f_out, 1); //CHECK IF ERROR ?
 	if (p->f_in != 0)
-	{
-		printf("STDIN FDUPED\n");
-		dup2(p->f_in, 0);
-		printf("%s\n", strerror(errno));
-	}
+		dup2(p->f_in, 0); //CHECK IF ERROR ?
 	if (i > 0)
 	{
-		dup2(p->old_end[0], p->f_in);
+		dup2(p->old_end[0], p->f_in); // check error
 		close_pipe(p->old_end);
 	}
 	if (i + 1 < shell->nb_cmd)
 	{
-		dup2(p->new_end[1], p->f_out);
+		dup2(p->new_end[1], p->f_out); //check error
 		close_pipe(p->new_end);
 	}
 	ret = ft_bin(&(shell->env), shell->cmds[i].av, *p);
@@ -154,7 +139,6 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 		exit(0);
 	if (ret == 8)
 	{
-		printf("MY EXECVE\n");
 		if (execve(cmd_path, shell->cmds[i].av, shell->env) == -1)
 			error_mess("minishell: ", shell->cmds[i].av[0], ": command not found", 127);
 	}
