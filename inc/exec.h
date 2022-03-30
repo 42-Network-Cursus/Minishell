@@ -32,10 +32,11 @@ typedef struct s_pipes
 	int		f_out;
 }				t_pipes;
 
-char		*ft_cmd_path(char **env, char *cmd);
-int			ft_execute(char **cmd, char **envp); 
-void		ft_exec_error(char *str);
-void		ft_exec_cmd(t_mini *shell);
-int			ft_bin(char ***env, char **cmd, t_pipes p);
+char	*ft_cmd_path(char **env, char *cmd);
+int		ft_execute(char **cmd, char **envp); 
+void	ft_exec_error(char *str);
+void	ft_exec_cmd(t_mini *shell);
+int		ft_bin(char ***env, char **cmd, t_pipes p);
+void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid);
 
 #endif

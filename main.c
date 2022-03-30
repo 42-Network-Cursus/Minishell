@@ -83,7 +83,7 @@ static void	shell_loop(t_mini *shell, char **input)
 		if (!parser(shell, input))
 			continue ;
 		free(*input);
-		ft_exec_cmd(shell); //exe() deleted
+		ft_exec_cmd(shell);
 		free_cmds(shell->cmds, shell->nb_cmd);
 	}
 	if (shell->nb_cmd > 0)

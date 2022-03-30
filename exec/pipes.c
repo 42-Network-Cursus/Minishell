@@ -45,29 +45,72 @@ void	ft_exec_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
+int	open_heredoc(t_here *doc)
+{
+	int		fd;
+	char	*input;
+
+	fd = open("heredoc", O_CREAT | O_WRONLY);
+	while (1)
+	{
+		input = readline(">");
+		printf("input: %s\n", input);
+		if (!ft_strncmp(input, doc->delimiter, ft_strlen(input)))
+		{
+			if (doc->next == NULL)
+			{
+				free(input);
+				close(fd);
+				fd = open("heredoc", O_RDONLY);
+				unlink("heredoc");
+				return (fd);
+			}
+			else
+			{
+				doc = doc->next;
+				printf("IN ELSE, DOC NEXT DELIM: %s\n", doc->delimiter);
+				close(fd);
+				fd = open("heredoc", O_WRONLY | O_TRUNC);
+			}
+		}
+		else
+		{
+			write(fd, input, ft_strlen(input));
+			write(fd, "\n", 1);
+		}
+		free(input);
+	}
+	return (0);
+}
+
 void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 {
 	char	*red_inf;
 	char	*red_outf;
 
+	p->f_in = 0;
+	p->f_out = 1;
 	red_inf = shell->cmds[i].redir_in.file_name;
 	red_outf = shell->cmds[i].redir_out.file_name;
+
+	//TODEL
+	printf("inf: %s\n", red_inf);
+
+	if (shell->cmds[i].redir_in.doc)
+		p->f_in = open_heredoc(shell->cmds[i].redir_in.doc);
 	if (red_inf)
 	{
 		p->f_in = open(red_inf, shell->cmds[i].redir_in.flags);
 		if (p->f_in < 0)
 			ft_exec_error("Open"); //TO REPLACE
-	}
-	else
-		p->f_in = 0;
+	}	
 	if (red_outf)
 	{
 		p->f_out = open(red_outf, shell->cmds[i].redir_out.flags);
 		if (p->f_out < 0)
 			ft_exec_error("Open"); //TO REPLACE
 	}
-	else
-		p->f_out = 1;
+		
 }
 
 void	close_pipe(int *end)

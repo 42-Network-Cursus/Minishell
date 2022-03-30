@@ -31,7 +31,7 @@ static	int	dup_from(char **s1, int from)
 	return (1);
 }
 
-int	bin_normalise(char **str)
+int	bin_normalise(char **str) //PROBLEM FSANITIZE
 {
 	int	i;
     int len;
