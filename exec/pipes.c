@@ -45,32 +45,41 @@ void	ft_exec_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
+#include <string.h>
+#include <errno.h>
+
 int	open_heredoc(t_here *doc)
 {
 	int		fd;
 	char	*input;
 
-	fd = open("heredoc", O_CREAT | O_WRONLY);
+	//HANDLE SIGNALS C-c
+
+	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
+//	if (unlink("heredoc"))
+//		ft_exec_error("Unlink");
 	while (1)
 	{
 		input = readline(">");
-		printf("input: %s\n", input);
-		if (!ft_strncmp(input, doc->delimiter, ft_strlen(input)))
+		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input))) //ADDED INPUT AS CONDITION, MAKES C-D do \n
 		{
 			if (doc->next == NULL)
 			{
 				free(input);
 				close(fd);
-				fd = open("heredoc", O_RDONLY);
-				unlink("heredoc");
+				fd = open("heredoc", O_RDONLY, 0666);
+				printf("%s\n", strerror(errno));
+				
 				return (fd);
 			}
 			else
 			{
 				doc = doc->next;
-				printf("IN ELSE, DOC NEXT DELIM: %s\n", doc->delimiter);
 				close(fd);
-				fd = open("heredoc", O_WRONLY | O_TRUNC);
+				fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
+	//			if (unlink("heredoc"))
+		//			ft_exec_error("Unlink");
+				printf("Got here\n");
 			}
 		}
 		else
@@ -92,10 +101,6 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 	p->f_out = 1;
 	red_inf = shell->cmds[i].redir_in.file_name;
 	red_outf = shell->cmds[i].redir_out.file_name;
-
-	//TODEL
-	printf("inf: %s\n", red_inf);
-
 	if (shell->cmds[i].redir_in.doc)
 		p->f_in = open_heredoc(shell->cmds[i].redir_in.doc);
 	if (red_inf)
@@ -123,10 +128,17 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 {
 	int		ret;
 
+	check_in_out_redir(shell, p, i);
+	printf("f_in child: %d\n", p->f_in);
+	printf("f_out child: %d\n", p->f_out);
 	if (p->f_out != 1)
 		dup2(p->f_out, 1);
 	if (p->f_in != 0)
+	{
+		printf("STDIN FDUPED\n");
 		dup2(p->f_in, 0);
+		printf("%s\n", strerror(errno));
+	}
 	if (i > 0)
 	{
 		dup2(p->old_end[0], p->f_in);
@@ -142,6 +154,7 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 		exit(0);
 	if (ret == 8)
 	{
+		printf("MY EXECVE\n");
 		if (execve(cmd_path, shell->cmds[i].av, shell->env) == -1)
 			error_mess("minishell: ", shell->cmds[i].av[0], ": command not found", 127);
 	}
@@ -180,9 +193,10 @@ void	ft_exec_cmd(t_mini *shell)
 	{
 		if (i < shell->nb_cmd - 1)
 			pipe(p.new_end);
-		check_in_out_redir(shell, &p, i);
 		pid = fork();
-		if (pid == 0)
+		if (pid == -1)
+			ft_exec_error("Fork"); //CHANGE
+		else if (pid == 0)
 		{
 			cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
 			child_process(shell, &p, i, cmd_path);

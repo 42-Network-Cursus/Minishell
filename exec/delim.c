@@ -1,3 +1,5 @@
+//TO DEL, REPLACED BY heredoc file shenanigans
+
 char	**sep_input(char	*str)
 {
 	char	**ret;
