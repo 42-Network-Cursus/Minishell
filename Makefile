@@ -1,22 +1,22 @@
 NAME		=	minishell
 
 PARS		=	main.c \
-				srcs/parsing/parser.c \
-				srcs/parsing/ft_strtok.c \
-				srcs/parsing/ft_strtok_utils.c \
-				srcs/parsing/utils.c \
-				srcs/parsing/parser_utils.c \
-				srcs/parsing/check_env_var.c \
-				srcs/parsing/bin_check.c
+				parsing/parser.c \
+				parsing/ft_strtok.c \
+				parsing/ft_strtok_utils.c \
+				parsing/utils.c \
+				parsing/parser_utils.c \
+				parsing/check_env_var.c \
+				parsing/bin_check.c
 
-EXE			=	srcs/exec/exec.c\
-				srcs/exec/pipes.c
+EXE			=	exec/exec.c\
+				exec/pipes.c
 
-BIN			=	srcs/builtins/echo.c \
-				srcs/builtins/cd.c \
-				srcs/builtins/export_unset.c \
-				srcs/builtins/pwd_env.c \
-				srcs/builtins/utils.c 
+BIN			=	builtins/echo.c \
+				builtins/cd.c \
+				builtins/export_unset.c \
+				builtins/pwd_env.c \
+				builtins/utils.c 
 				
 LIBFT		= ./libft/
 

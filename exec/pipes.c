@@ -50,7 +50,7 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 	char	*red_inf;
 	char	*red_outf;
 
-	red_inf = shell->cmds[i]redir_in.file_name;
+	red_inf = shell->cmds[i].redir_in.file_name;
 	red_outf = shell->cmds[i].redir_out.file_name;
 	if (red_inf)
 	{
@@ -101,6 +101,7 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 	{
 		if (execve(cmd_path, shell->cmds[i].av, shell->env) == -1)
 			error_mess("minishell: ", shell->cmds[i].av[0], ": command not found", 127);
+	}
 }
 
 void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
@@ -122,14 +123,14 @@ void	ft_exec_cmd(t_mini *shell)
 	t_pipes p;
 	char	*cmd_path;
 
-
-
-//	ft_bzero(&p, sizeof(t_pipes));
-	//	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
-//	{
-//		if (ft_bin(&(shell->env), shell->cmds[0].av, p) == 1)//cmd[i]
-//			return ;
-//	}
+	/*
+	ft_bzero(&p, sizeof(t_pipes));
+		if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
+	{
+		if (ft_bin(&(shell->env), shell->cmds[0].av, p) == 1)//cmd[i]
+			return ;
+	}
+	*/
 
 	i = -1;
 	while (++i < shell->nb_cmd)
