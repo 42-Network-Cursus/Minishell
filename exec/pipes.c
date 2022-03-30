@@ -175,7 +175,6 @@ void	ft_exec_cmd(t_mini *shell)
 	i = -1;
 	while (++i < shell->nb_cmd)
 	{
-		printf("Magic happens && we inside the loop\n");
 		if (i < shell->nb_cmd - 1)
 			pipe(p.new_end);
 		pid = fork();
