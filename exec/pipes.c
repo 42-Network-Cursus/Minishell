@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
-#include "../../inc/builtins.h"
-#include "../../inc/exec.h"
+#include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 
 char	*ft_cmd_path(char **env, char *cmd)
@@ -115,60 +115,6 @@ void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
 	waitpid(pid, NULL, 0);
 }
 
-
-
-char	**sep_input(char	*str)
-{
-	char	**ret;
-	char	*tmp;
-	int		i;
-
-	ret = ft_split(str, "\n");
-	i = -1;
-	while (ret[++i])
-	{
-		tmp = ft_strdup(ret[i]);
-		free(ret[i]);
-		if (!tmp)
-			//ERROR
-		ret[i] = ft_strjoin(tmp, "\n");
-		free(tmp);
-		if (!ret[i])
-			//ERROR
-	}
-	return (ret);
-}
-
-char	**append_to_cmds(char **cmd, char **split_input, int nb_of_input)
-{
-	int		i;
-	int		j;
-	char	*tmp;
-	char	**ret;
-
-	i = 0;
-	while (cmd[i])
-		i++;
-	ret = malloc(sizeof(char *) * (i + nb_of_input + 1));
-	j = -1;
-	while (cmd[++j])
-	{
-		ret[j] = ft_strdup(cmd[j]);
-		if (ret[j])
-			//ERROR
-		free(cmd[j]);
-	}
-	j = 0;
-	while (split_input[j])
-		ret[i++] = split_input[j++];
-	//LOOP FREE CMD HERE ??
-	return (ret);
-}
-
-
-
-
-
 void	ft_exec_cmd(t_mini *shell)
 {
 	int 	i;
@@ -176,8 +122,7 @@ void	ft_exec_cmd(t_mini *shell)
 	t_pipes p;
 	char	*cmd_path;
 
-	//delimiter vars
-	char	*hd_input;
+
 
 //	ft_bzero(&p, sizeof(t_pipes));
 	//	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
@@ -189,61 +134,6 @@ void	ft_exec_cmd(t_mini *shell)
 	i = -1;
 	while (++i < shell->nb_cmd)
 	{
-
-
-
-
-
-
-		//int	get_hd_input(char **str);
-		// Block of text down = fct
-
-		if (shell->cmds[i].redir_in.doc)
-		{
-			while (shell->cmds[i].redir_in.doc)
-			{
-				input = readline(">");
-				if (!ft_strncmp(input, shell->cmds[i].redir_in.doc->delimiter, ft_strlen(input)))
-				{
-					if (shell->cmds[i].redir_in.doc->next == NULL)
-					{
-						free(input);
-						break;
-					}
-					else
-					{
-						shell->cmds[i].redir_in.doc = shell->cmds[i].redir_in.doc->next;
-						free(here_doc);
-						here_doc = NULL;
-						cmds_here_doc = 0;
-					}
-				}
-				if (!here_doc)
-					here_doc = ft_strdup("");
-				tmp = ft_strdup(here_doc);
-				free(here_doc);
-				here_doc = ft_strjoin(here_doc, input);	
-				free(tmp);
-				//repeat strjoin with \n
-				tmp = ft_strdup(here_doc);
-				free(here_doc);
-				here_doc = ft_strjoin(here_doc, "\n");	
-				free(tmp);
-				cmds_here_doc++;
-		
-				free(input);
-			}
-
-
-
-
-
-
-
-			//FREE CMDS->AV ? Or in append ?
-			//append_to_cmds(cmd, sep_input(hd_input));
-		}
-
 		if (i < shell->nb_cmd - 1)
 			pipe(p.new_end);
 		check_in_out_redir(shell, &p, i);

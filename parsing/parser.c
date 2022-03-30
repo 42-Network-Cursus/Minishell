@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "../../inc/exec.h"
-#include "../../inc/builtins.h"
+#include "exec.h"
+#include "builtins.h"
 
 int	get_nb_cmd(t_token *head)
 {

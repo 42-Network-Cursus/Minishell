@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/exec.h"
-#include "../../inc/builtins.h"
+#include "exec.h"
+#include "builtins.h"
 
 int	cmp(char *s1, char *s2)
 {

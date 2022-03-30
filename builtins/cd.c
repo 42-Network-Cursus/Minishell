@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/exec.h"
-#include "../../inc/builtins.h"
-#include "../../inc/minishell.h"
+#include "exec.h"
+#include "builtins.h"
+#include "minishell.h"
 
 static void	free_many(char *buf, char *new_dest)
 {

@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/exec.h"
-#include "../../inc/builtins.h"
-#include "../../inc/minishell.h"
+#include "exec.h"
+#include "builtins.h"
+#include "minishell.h"
 
 int	ft_export(char ***env, char **cmd)
 {

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/exec.h"
-#include "../../inc/builtins.h"
+#include "exec.h"
+#include "builtins.h"
 
 typedef struct s_var
 {

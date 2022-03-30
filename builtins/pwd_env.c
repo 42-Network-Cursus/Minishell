@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/exec.h"
-#include "../../inc/builtins.h"
-#include "../../inc/minishell.h"
+#include "exec.h"
+#include "builtins.h"
+#include "minishell.h"
 
 void	get_cd(char **buf)
 {
