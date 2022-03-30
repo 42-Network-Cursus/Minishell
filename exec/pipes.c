@@ -54,7 +54,7 @@ int	open_heredoc(t_here *doc)
 	while (1)
 	{
 		input = readline(">");
-		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input)))
+		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input))) //SEGV CTRL-D HERE DURING HEREDOC> + NEED TO DEL HEREDOC (file) IF CTRL-D
 		{
 			if (doc->next == NULL)
 			{
@@ -162,14 +162,14 @@ void	ft_exec_cmd(t_mini *shell)
 	t_pipes p;
 	char	*cmd_path;
 
-	/*
+	
 	ft_bzero(&p, sizeof(t_pipes));
-		if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
+	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
 	{
-		if (ft_bin(&(shell->env), shell->cmds[0].av, p) == 1)//cmd[i]
+		if (ft_bin(&(shell->env), shell->cmds[0].av, p) == 1)
 			return ;
 	}
-	*/
+	
 
 	i = -1;
 	while (++i < shell->nb_cmd)
