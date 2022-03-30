@@ -62,8 +62,7 @@ int	open_heredoc(t_here *doc)
 				close(fd);
 				fd = open("heredoc", O_RDONLY, 0666);
 				if (unlink("heredoc"))
-					ft_exec_error("Unlink");intf("%s\n", strerror(errno));
-				
+					ft_exec_error("Unlink");
 				return (fd);
 			}
 			else
