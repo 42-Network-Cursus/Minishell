@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:03:17 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/29 16:31:47 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:36:55 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,5 @@ int		error_mess(char *s, char *mess, char *cmd, int exstat);
 int		bin_cmd(char ***env, char **cmd);
 
 char	*cat_dup(char *dst, char *src);
-
-
-
-
-
-
-
-
-
-void mypwd();
-
 
 #endif

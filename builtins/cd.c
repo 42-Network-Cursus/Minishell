@@ -6,13 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:27 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/29 16:43:24 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:31:27 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
-#include "builtins.h"
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 static void	free_many(char *buf, char *new_dest)
 {

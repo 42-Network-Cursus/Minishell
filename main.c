@@ -6,11 +6,12 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/29 16:39:15 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:39:55 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 #include "exec.h"
 
 static void	free_env(char **env)

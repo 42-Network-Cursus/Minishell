@@ -6,13 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:25 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/29 16:34:25 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:31:42 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
-#include "builtins.h"
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 void	get_cd(char **buf)
 {
@@ -65,8 +65,8 @@ int	ft_env(char **env, char **cmd, t_pipes p)
 	while (env[i])
 	{
 		len = ft_strlen(env[i]);
-		printf("f_in: %d\n", p.f_in);
-		printf("f_out: %d\n", p.f_out);
+		// printf("f_in: %d\n", p.f_in);
+		// printf("f_out: %d\n", p.f_out);
 		write(p.f_out, env[i], len);
 		write(p.f_out, "\n", 1);
 		i++;

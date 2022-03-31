@@ -6,12 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 11:54:46 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/29 16:29:49 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:31:46 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "minishell.h"
 #include "builtins.h"
+#include "exec.h"
 
 int	cmp(char *s1, char *s2)
 {
@@ -33,7 +34,9 @@ int	error_mess(char *s, char *mess, char *cmd, int exstat)
 {
 	if (s)
 		write(1, s, ft_strlen(s));
+	if (mess)
 	write(1, mess, ft_strlen(mess));
+	if (cmd)
 	write(1, cmd, ft_strlen(cmd));
 	write(1, "\n", 1);
 	ges = exstat;

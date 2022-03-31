@@ -6,13 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 11:47:25 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/29 16:48:29 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:31:52 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
-#include "builtins.h"
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 void	ft_minimize(char ***cmd)
 {
@@ -24,6 +24,23 @@ void	ft_minimize(char ***cmd)
 		ft_tolower((int)(*cmd)[0][i]);
 		i++;
 	}
+}
+
+int	ft_bin_solo(char **cmd, char ***env)
+{
+	ft_minimize(&cmd);
+	if (!ncmp(cmd[0], "cd", 2))
+		return (ft_cd(cmd));
+	if (!ncmp(cmd[0], "export", 6))
+		return (ft_export(env, cmd));
+	if (!ncmp(cmd[0], "unset", 5))
+		return (ft_unset(env, cmd));
+	if (!ncmp(cmd[0], "exit", 4))
+	{
+		write(1, "exit\n", 5);
+		return (exit(0), 1);
+	}
+	return (0);
 }
 
 int	ft_bin(char ***env, char **cmd, t_pipes p)

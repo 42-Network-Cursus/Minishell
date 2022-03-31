@@ -6,13 +6,11 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:07:30 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/29 13:00:09 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:07:12 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "exec.h"
-#include "builtins.h"
 
 int	get_nb_cmd(t_token *head)
 {
@@ -113,10 +111,10 @@ int	parser(t_mini *shell, char **input)
 	fill_ac(shell, head);
 	set_names_to_null(shell);
 	create_tab_cmd(head, shell->cmds, 0, 0);
-	while (shell->nb_cmd > i)
-	{
-		bin_normalise(&shell->cmds[i].av[0]);
-		i++;
-	}
+	// while (shell->nb_cmd > i)
+	// {
+	// 	bin_normalise(&shell->cmds[i].av[0]);
+	// 	i++;
+	// }
 	return (free_tokens(&head));
 }

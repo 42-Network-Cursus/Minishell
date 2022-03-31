@@ -6,12 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 17:23:42 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/28 18:50:22 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:31:33 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "minishell.h"
 #include "builtins.h"
+#include "exec.h"
 
 typedef struct s_var
 {

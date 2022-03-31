@@ -6,13 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 12:01:34 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/29 16:34:46 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:49:04 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
-#include "builtins.h"
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 static	int	dup_from(char **s1, int from)
 {

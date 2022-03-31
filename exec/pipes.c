@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:47:50 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/24 12:55:32 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:42:28 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ char	*ft_cmd_path(char **env, char *cmd)
 	char	**paths;
 
 	i = 0;
-	while (!ft_strnstr(env[i], "PATH=", 5))
+	// printf("cmd = %s\n\n", cmd);
+	if(cmd[0] == '.' && cmd[1] == '/') 		// mandatory to launch ./
+		return (cmd);
+	while (!ft_strnstr(env[i], "PATH=", 5) && env[i])
 		i++;
 	env[i] = ft_substr(env[i], 6, ft_strlen(env[i]));
 	paths = ft_split(env[i], ':');
@@ -169,8 +172,11 @@ void	ft_exec_cmd(t_mini *shell)
 		//NEED TO REDIR IN OUT
 		//+ << IN FORK
 		//FUCK
-		if (ft_bin(&(shell->env), shell->cmds[0].av, p) == 1)
+		if (!bin_normalise(shell->cmds[0].av))
 			return ;
+		else
+			if (ft_bin_solo(shell->cmds[0].av, &shell->env) == 1)
+				return ;
 	}
 	i = -1;
 	while (++i < shell->nb_cmd)
@@ -179,11 +185,15 @@ void	ft_exec_cmd(t_mini *shell)
 			pipe(p.new_end);
 		pid = fork();
 		if (pid == -1)
-			ft_exec_error("Fork"); //CHANGE
+			error_mess(NULL, "Error forking", NULL, 10);
 		else if (pid == 0)
 		{
-			cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
-			child_process(shell, &p, i, cmd_path);
+			if (bin_normalise(&shell->cmds[i].av[0]))
+			{
+				cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
+				child_process(shell, &p, i, cmd_path);
+			}
+			exit(0);         // kill the child process if execve does not launch
 		}
 		else
 			parent_process(shell, &p, i, pid);

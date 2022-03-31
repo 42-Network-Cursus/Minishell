@@ -6,13 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:29 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/28 16:23:49 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 16:31:39 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
-#include "builtins.h"
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 int	ft_export(char ***env, char **cmd)
 {
@@ -26,7 +26,7 @@ int	ft_export(char ***env, char **cmd)
 		i++;
 	ret = malloc(sizeof(char *) * (i + 2));
 	if (!ret)
-		return (0);
+		return (exit(0), 1);
 	while (j < i)
 	{
 		ret[j] = (*env)[j];
@@ -72,7 +72,7 @@ int	ft_unset(char ***env, char **cmd)
 		i++;
 	ret = malloc(sizeof(char *) * i);
 	if (!ret)
-		return (0);
+		return (exit(0), 1);
 	i = 0;
 	while (cmp((*env)[i], cmd[1]) && (*env)[i])
 	{
