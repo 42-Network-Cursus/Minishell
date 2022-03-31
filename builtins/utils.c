@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 11:54:46 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 19:18:53 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 19:20:12 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,32 @@ char	*cat_dup(char *dst, char *src)
 	ret[i] = '\0';
 	free(dst);
 	return (ret);
+}
+
+static void	nl_convert_process(char **s)
+{
+	char	*ret;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	ret = malloc(sizeof(char) * ft_strlen(*s) + 1);
+	if (!ret)
+		return (exit(0));
+	while ((*s)[i])
+	{
+		ret[j] = (*s)[i];
+		if ((*s)[i] == '\\' && (*s)[i + 1] == '\\' && (*s)[i + 2] == 'n')
+		{
+			ret[j] = '\n';
+			i += 2;
+		}
+		i++;
+		j++;
+	}
+	ret[j] = '\0';
+	if (i == j)
+		return (free(ret));
+	*s = ret;
 }
