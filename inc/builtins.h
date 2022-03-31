@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:03:17 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 16:36:55 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 18:40:37 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@
 void	get_cd(char **buf);
 int	    ft_pwd(char **cmd, t_pipes p);
 int	    ft_cd(char **cmd);
-int	    ft_echo(char **cmd, char **env);
+int	    ft_echo(char **cmd);
 int	    ft_unset(char ***env, char **cmd);
 int	    ft_export(char ***env, char **cmd);
 int	    ft_env(char **env, char **cmd, t_pipes p);
 
 int 	cmp(char *s1, char *s2);
 int	    ncmp(char *s1, char *s2, size_t n);
-void	nl_convert(char **s);
+void	nl_convert(char ***s);
 int	    bin_normalise(char **str);
 
 int		error_mess(char *s, char *mess, char *cmd, int exstat);

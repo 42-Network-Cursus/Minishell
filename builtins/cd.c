@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:27 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 16:31:27 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 19:16:43 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ static int	ft_cd_2(char **cmd, char *buf, char *new_dest)
 	if (cmd[1][0] == '/')
 	{
 		if (chdir(cmd[1]) == -1)
-			return (error_mess(cmd[0], ": no such file or directory: ", cmd[1], 2));
+			return (error_mess(cmd[0],
+					": no such file or directory: ", cmd[1], 2));
 		free(buf);
 	}
 	else
@@ -62,7 +63,8 @@ static int	ft_cd_2(char **cmd, char *buf, char *new_dest)
 		if (!new_dest)
 			return (0);
 		if (chdir(cmd[1]) == -1)
-			return (error_mess(cmd[0], ": no such file or directory: ", cmd[1], 2));
+			return (error_mess(cmd[0],
+					": no such file or directory: ", cmd[1], 2));
 		free_many(buf, new_dest);
 	}
 	return (1);

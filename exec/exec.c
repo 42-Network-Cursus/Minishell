@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 11:47:25 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 16:31:52 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/03/31 18:40:25 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	ft_bin(char ***env, char **cmd, t_pipes p)
 {
 	ft_minimize(&cmd);
 	if (!ncmp(cmd[0], "echo", 4))
-		return (ft_echo(cmd, *env));
+		return (ft_echo(cmd));
 	if (!ncmp(cmd[0], "cd", 2))
 		return (ft_cd(cmd));
 	if (!ncmp(cmd[0], "pwd", 3))
