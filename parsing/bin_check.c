@@ -40,7 +40,7 @@ int	bin_normalise(char **str)
 
 	i = 0;
     len = 0;
-	if (!str) //SEGV HERE
+	if (!str)
 		return (0);
     if ((*str)[0] == '/')
 	{

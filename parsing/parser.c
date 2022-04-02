@@ -92,13 +92,14 @@ static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
 			head = head->next;
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int	parser(t_mini *shell, char **input)
 {
 	t_token	*head;
 	int		i;
+	int		fd_error; //New var to check if < error (inexistant file)
 
 	i = 0;
 	head = NULL;
@@ -110,7 +111,12 @@ int	parser(t_mini *shell, char **input)
 		return (0);
 	fill_ac(shell, head);
 	set_names_to_null(shell);
-	create_tab_cmd(head, shell->cmds, 0, 0);
+	
+	fd_error = create_tab_cmd(head, shell->cmds, 0, 0);
+	//loop heredoc, for every cmd redirect input aswell i think
+
+
+	//delete commented code here under ?
 	// while (shell->nb_cmd > i)
 	// {
 	// 	bin_normalise(&shell->cmds[i].av[0]);

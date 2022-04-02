@@ -6,13 +6,20 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:47:50 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 16:42:28 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/02 16:49:27 by cwastche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
+
+// FCT TO DEL, REPLACED BY ERROR_MESS()
+void	ft_exec_error(char *str)
+{
+	perror(str);
+	exit(EXIT_FAILURE);
+}
 
 
 char	*ft_cmd_path(char **env, char *cmd)
@@ -40,59 +47,6 @@ char	*ft_cmd_path(char **env, char *cmd)
 }
 
 
-// FCT TO DEL, REPLACED BY ERROR_MESS()
-void	ft_exec_error(char *str)
-{
-	perror(str);
-	exit(EXIT_FAILURE);
-}
-
-int	open_heredoc(t_here *doc) //NOT SURE HOW TO MAKE SIGNALS WORK FOR CTRL-C
-{
-	int		fd;
-	char	*input;
-
-	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
-	while (1)
-	{
-	//	signal(SIGQUIT, SIG_IGN); 
-	//	signal(SIGINT, signal_handler);
-		input = readline(">");
-	//	signal(SIGQUIT, SIG_IGN);
-		if (!input) //CTRL-D CHECK
-		{
-			if (unlink("heredoc"))
-				ft_exec_error("Unlink");
-			close(fd);
-			exit(0);
-		}
-		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input)))
-		{
-			if (doc->next == NULL)
-			{
-				free(input);
-				close(fd);
-				fd = open("heredoc", O_RDONLY, 0666);
-				if (unlink("heredoc"))
-					ft_exec_error("Unlink");
-				return (fd);
-			}
-			else
-			{
-				doc = doc->next;
-				close(fd);
-				fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
-			}
-		}
-		else
-		{
-			write(fd, input, ft_strlen(input));
-			write(fd, "\n", 1);
-		}
-		free(input);
-	}
-	return (0);
-}
 
 void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 {
@@ -127,16 +81,12 @@ void	close_pipe(int *end)
 void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 {
 	int		ret;
-	int		f_tmp;
 
-	if (shell->cmds[i].redir_in.doc)
-		f_tmp = open_heredoc(shell->cmds[i].redir_in.doc);
-	if (p->f_in == 0)
-		p->f_in = f_tmp;
+	check_in_out_redir(shell, p, i);
 	if (p->f_out != 1)
-		dup2(p->f_out, 1); //CHECK IF ERROR ?
+		dup2(p->f_out, 1); //CHECK ERROR 
 	if (p->f_in != 0)
-		dup2(p->f_in, 0); //CHECK IF ERROR ?
+		dup2(p->f_in, 0); //CHECK ERROR
 	if (i > 0)
 	{
 		dup2(p->old_end[0], p->f_in); // check error
@@ -187,8 +137,8 @@ void	ft_exec_cmd(t_mini *shell)
 	//Example: exit << eof
 	//Not launching Heredoc, directly exiting
 
-//	ft_bzero(&p, sizeof(t_pipes)); // Delete ?,a
-	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
+//	ft_bzero(&p, sizeof(t_pipes)); // Delete ?
+/*	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
 	{
 		//NEED TO REDIR IN OUT
 		//+ << IN FORK
@@ -199,13 +149,10 @@ void	ft_exec_cmd(t_mini *shell)
 			if (ft_bin_solo(shell->cmds[0].av, &shell->env) == 1)
 				return ;
 	}
-
-
-
+	*/
 		i = -1;
 		while (++i < shell->nb_cmd)
 		{
-			check_in_out_redir(shell, &p, i);
 			if (i < shell->nb_cmd - 1)
 				pipe(p.new_end);
 			pid = fork();
@@ -218,7 +165,7 @@ void	ft_exec_cmd(t_mini *shell)
 					cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
 					child_process(shell, &p, i, cmd_path);
 				}
-				exit(0);         // kill the child process if execve does not launch
+				exit(0);
 			}
 			else
 				parent_process(shell, &p, i, pid);

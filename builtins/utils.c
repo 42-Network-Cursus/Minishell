@@ -33,12 +33,12 @@ int	cmp(char *s1, char *s2)
 int	error_mess(char *s, char *mess, char *cmd, int exstat)
 {
 	if (s)
-		write(1, s, ft_strlen(s));
+		write(2, s, ft_strlen(s));
 	if (mess)
-		write(1, mess, ft_strlen(mess));
+		write(2, mess, ft_strlen(mess));
 	if (cmd)
-		write(1, cmd, ft_strlen(cmd));
-	write(1, "\n", 1);
+		write(2, cmd, ft_strlen(cmd));
+	write(2, "\n", 1);
 	ges = exstat;
 	return (1);
 }

@@ -37,7 +37,6 @@ int	ft_pwd(char **cmd, t_pipes p)
 	char	*buf;
 	int		i;
 
-	printf("USING B_IN PWD\n"); //TODEL
 	(void)p;
 	i = 0;
 	while (cmd[i])
@@ -59,15 +58,13 @@ int	ft_env(char **env, char **cmd, t_pipes p)
 	(void)p;
 	if (cmd[1])
 	{
-		write(1, "env: ", 5);
+		write(2, "env: ", 5);
 		return (error_mess(NULL, cmd[1], ": No such file or directory", 127));
 	}
 	i = 0;
 	while (env[i])
 	{
 		len = ft_strlen(env[i]);
-		// printf("f_in: %d\n", p.f_in);
-		// printf("f_out: %d\n", p.f_out);
 		write(p.f_out, env[i], len);
 		write(p.f_out, "\n", 1);
 		i++;
