@@ -37,6 +37,7 @@ int	ft_pwd(char **cmd, t_pipes p)
 	char	*buf;
 	int		i;
 
+	printf("USING B_IN PWD\n"); //TODEL
 	(void)p;
 	i = 0;
 	while (cmd[i])

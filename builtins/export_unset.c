@@ -14,12 +14,13 @@
 #include "builtins.h"
 #include "exec.h"
 
-int	ft_export(char ***env, char **cmd)
+int	ft_export(char ***env, char **cmd) //
 {
 	char	**ret;
 	int		i;
 	int		j;
 
+	printf("USING B_IN EXPORT CMD\n");
 	i = 0;
 	j = 0;
 	while ((*env)[i])
@@ -32,7 +33,7 @@ int	ft_export(char ***env, char **cmd)
 		ret[j] = (*env)[j];
 		j++;
 	}
-	ret[i] = ft_strdup(cmd[1]);
+	ret[i] = ft_strdup(cmd[1]); //SEGV WHEN CALLING EXPORT ALONE
 	if (!ret[i])
 		return (0);
 	i++;

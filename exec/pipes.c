@@ -21,15 +21,14 @@ char	*ft_cmd_path(char **env, char *cmd)
 	char	**paths;
 
 	i = 0;
-	// printf("cmd = %s\n\n", cmd);
-	if(cmd[0] == '.' && cmd[1] == '/') 		// mandatory to launch ./
+	if(cmd[0] == '.' && cmd[1] == '/')
 		return (cmd);
 	while (!ft_strnstr(env[i], "PATH=", 5) && env[i])
 		i++;
 	env[i] = ft_substr(env[i], 6, ft_strlen(env[i]));
 	paths = ft_split(env[i], ':');
 	i = -1;
-	while (paths[++i])
+	while (paths && paths[++i])
 	{
 		paths[i] = ft_strjoin(paths[i], "/");
 		paths[i] = ft_strjoin(paths[i], cmd);
@@ -48,7 +47,7 @@ void	ft_exec_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
-int	open_heredoc(t_here *doc)
+int	open_heredoc(t_here *doc) //NOT SURE HOW TO MAKE SIGNALS WORK FOR CTRL-C
 {
 	int		fd;
 	char	*input;
@@ -56,8 +55,18 @@ int	open_heredoc(t_here *doc)
 	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
 	while (1)
 	{
+	//	signal(SIGQUIT, SIG_IGN); 
+	//	signal(SIGINT, signal_handler);
 		input = readline(">");
-		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input))) //SEGV CTRL-D HERE DURING HEREDOC> + NEED TO DEL HEREDOC (file) IF CTRL-D
+	//	signal(SIGQUIT, SIG_IGN);
+		if (!input) //CTRL-D CHECK
+		{
+			if (unlink("heredoc"))
+				ft_exec_error("Unlink");
+			close(fd);
+			exit(0);
+		}
+		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input)))
 		{
 			if (doc->next == NULL)
 			{
@@ -94,8 +103,6 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 	p->f_out = 1;
 	red_inf = shell->cmds[i].redir_in.file_name;
 	red_outf = shell->cmds[i].redir_out.file_name;
-	if (shell->cmds[i].redir_in.doc)
-		p->f_in = open_heredoc(shell->cmds[i].redir_in.doc);
 	if (red_inf)
 	{
 		p->f_in = open(red_inf, shell->cmds[i].redir_in.flags);
@@ -120,8 +127,12 @@ void	close_pipe(int *end)
 void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 {
 	int		ret;
+	int		f_tmp;
 
-	check_in_out_redir(shell, p, i);
+	if (shell->cmds[i].redir_in.doc)
+		f_tmp = open_heredoc(shell->cmds[i].redir_in.doc);
+	if (p->f_in == 0)
+		p->f_in = f_tmp;
 	if (p->f_out != 1)
 		dup2(p->f_out, 1); //CHECK IF ERROR ?
 	if (p->f_in != 0)
@@ -142,7 +153,7 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 	if (ret == 8)
 	{
 		if (execve(cmd_path, shell->cmds[i].av, shell->env) == -1)
-			error_mess("minishell: ", shell->cmds[i].av[0], ": command not found", 127);
+			error_mess("Minishell: ", shell->cmds[i].av[0], ": command not found", 127);
 	}
 }
 
@@ -158,6 +169,9 @@ void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
 	waitpid(pid, NULL, 0);
 }
 
+
+//cd < file == SEGV
+
 void	ft_exec_cmd(t_mini *shell)
 {
 	int 	i;
@@ -165,8 +179,15 @@ void	ft_exec_cmd(t_mini *shell)
 	t_pipes p;
 	char	*cmd_path;
 
-	
-	ft_bzero(&p, sizeof(t_pipes)); // wat ?
+	//Using export | ls, not going through B_IN export cmd, but execve
+
+	//COMMENTED PART DOWN BELOW NEEDED TO UPDATE PWD FROM CD CALLS
+	//HOWEVER FUCKS UP BIN NORMALIZE CALLS: /usr/bin/cd OR /bin/ls
+
+	//Example: exit << eof
+	//Not launching Heredoc, directly exiting
+
+//	ft_bzero(&p, sizeof(t_pipes)); // Delete ?,a
 	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
 	{
 		//NEED TO REDIR IN OUT
@@ -178,26 +199,30 @@ void	ft_exec_cmd(t_mini *shell)
 			if (ft_bin_solo(shell->cmds[0].av, &shell->env) == 1)
 				return ;
 	}
-	i = -1;
-	while (++i < shell->nb_cmd)
-	{
-		if (i < shell->nb_cmd - 1)
-			pipe(p.new_end);
-		pid = fork();
-		if (pid == -1)
-			error_mess(NULL, "Error forking", NULL, 10);
-		else if (pid == 0)
+
+
+
+		i = -1;
+		while (++i < shell->nb_cmd)
 		{
-			if (bin_normalise(&shell->cmds[i].av[0]))
+			check_in_out_redir(shell, &p, i);
+			if (i < shell->nb_cmd - 1)
+				pipe(p.new_end);
+			pid = fork();
+			if (pid == -1)
+				error_mess(NULL, "Error forking", NULL, 10);
+			else if (pid == 0)
 			{
-				cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
-				child_process(shell, &p, i, cmd_path);
+				if (bin_normalise(&shell->cmds[i].av[0]))
+				{
+					cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
+					child_process(shell, &p, i, cmd_path);
+				}
+				exit(0);         // kill the child process if execve does not launch
 			}
-			exit(0);         // kill the child process if execve does not launch
+			else
+				parent_process(shell, &p, i, pid);
 		}
-		else
-			parent_process(shell, &p, i, pid);
-	}
-	if (shell->nb_cmd > 1)
-		close_pipe(p.old_end);
+		if (shell->nb_cmd > 1)
+			close_pipe(p.old_end);
 }

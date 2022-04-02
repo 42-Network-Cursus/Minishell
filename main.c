@@ -55,7 +55,7 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-//		rl_replace_line("", 0); GUAC TESTING
+		rl_replace_line("", 0);
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
@@ -77,15 +77,18 @@ static void	shell_loop(t_mini *shell, char **input)
 		if (!**input)
 			continue ;
 		add_history(*input);
+		//Input already malloc'd, + strtrim mallocs new instance. Need to use a tmp var to free OG input, else SEGV on white space only cmd.
 		*input = ft_strtrim_2(*input, " ");
-		
 		shell->nb_cmd = 0;
 		shell->cmds = NULL;
 		if (!parser(shell, input))
 			continue ;
-		free(*input);
-		ft_exec_cmd(shell);
-		free_cmds(shell->cmds, shell->nb_cmd);
+		if (*input != 0)
+		{
+			free(*input);
+			ft_exec_cmd(shell);
+			free_cmds(shell->cmds, shell->nb_cmd);
+		}
 	}
 	if (shell->nb_cmd > 0)
 		free_cmds(shell->cmds, shell->nb_cmd);

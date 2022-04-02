@@ -31,14 +31,16 @@ static	int	dup_from(char **s1, int from)
 	return (1);
 }
 
-int	bin_normalise(char **str) //PROBLEM FSANITIZE
+
+//EMPTY CMD (White spaces) MAKES THIS SEGFAULT
+int	bin_normalise(char **str) 
 {
 	int	i;
     int len;
 
 	i = 0;
     len = 0;
-	if (!str)
+	if (!str) //SEGV HERE
 		return (0);
     if ((*str)[0] == '/')
 	{

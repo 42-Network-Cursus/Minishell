@@ -26,7 +26,7 @@ void	ft_minimize(char ***cmd)
 	}
 }
 
-int	ft_bin_solo(char **cmd, char ***env)
+int	ft_bin_solo(char **cmd, char ***env) //why needed ?
 {
 	ft_minimize(&cmd);
 	if (!ncmp(cmd[0], "cd", 2))

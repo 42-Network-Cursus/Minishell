@@ -84,7 +84,7 @@ char	*cat_dup(char *dst, char *src)
 	return (ret);
 }
 
-static void	nl_convert_process(char **s)
+void	nl_convert_process(char **s)
 {
 	char	*ret;
 	int		i;

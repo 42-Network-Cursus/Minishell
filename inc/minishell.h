@@ -111,4 +111,6 @@ char	*ft_getenv(char *str, char **env);
 int		check_env_var(t_token *token, t_mini *shell, int i);
 int		exe(t_mini *shell);
 
+// main.c
+void	signal_handler(int signum);
 #endif

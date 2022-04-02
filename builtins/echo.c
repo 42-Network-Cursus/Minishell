@@ -14,6 +14,13 @@
 #include "builtins.h"
 #include "exec.h"
 
+//Problem?
+//BASH echo 1 2\\n 3 -> Output 1 2\n 3
+//				Minishell Output 1 2
+//								  3
+	
+//IMPLEMENT $? INSIDE ECHO
+
 typedef struct s_var
 {
 	int	i;

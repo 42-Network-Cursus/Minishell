@@ -36,6 +36,7 @@ int	    ft_env(char **env, char **cmd, t_pipes p);
 int 	cmp(char *s1, char *s2);
 int	    ncmp(char *s1, char *s2, size_t n);
 void	nl_convert(char ***s);
+void	nl_convert_process(char **s);
 int	    bin_normalise(char **str);
 
 int		error_mess(char *s, char *mess, char *cmd, int exstat);
