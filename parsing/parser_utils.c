@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	redir(t_red *red, t_token *head)
+int	redir(t_red *red, t_token *head, t_err_msg *err)
 {
 	int	fd;
 
@@ -31,7 +31,10 @@ int	redir(t_red *red, t_token *head)
 		red->flags = O_RDONLY;
 	fd = open(red->file_name, red->flags, 0644);
 	if (fd == -1)
-		return (ft_error(red->file_name, 1));
+	{
+		err->flags = red->flags;
+		return (1); //ft_error(red->file_name, 1)
+	}
 	close(fd);
 	return (0);
 }

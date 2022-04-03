@@ -83,7 +83,7 @@ static void	shell_loop(t_mini *shell, char **input)
 		shell->cmds = NULL;
 		if (!parser(shell, input))
 			continue ;
-		if (*input != 0)
+		if (*input != 0 && !delim_is_input(*input, ""))
 		{
 			free(*input);
 			ft_exec_cmd(shell);

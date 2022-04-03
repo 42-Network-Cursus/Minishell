@@ -55,6 +55,8 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 
 	p->f_in = 0;
 	p->f_out = 1;
+	if (shell->cmds[i].redir_in.doc)
+		p->f_in = open_heredoc(shell->cmds[i].redir_in.doc);
 	red_inf = shell->cmds[i].redir_in.file_name;
 	red_outf = shell->cmds[i].redir_out.file_name;
 	if (red_inf)
@@ -119,9 +121,6 @@ void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
 	waitpid(pid, NULL, 0);
 }
 
-
-//cd < file == SEGV
-
 void	ft_exec_cmd(t_mini *shell)
 {
 	int 	i;
@@ -129,47 +128,34 @@ void	ft_exec_cmd(t_mini *shell)
 	t_pipes p;
 	char	*cmd_path;
 
-	//Using export | ls, not going through B_IN export cmd, but execve
-
-	//COMMENTED PART DOWN BELOW NEEDED TO UPDATE PWD FROM CD CALLS
-	//HOWEVER FUCKS UP BIN NORMALIZE CALLS: /usr/bin/cd OR /bin/ls
-
-	//Example: exit << eof
-	//Not launching Heredoc, directly exiting
-
-//	ft_bzero(&p, sizeof(t_pipes)); // Delete ?
-/*	if (shell->nb_cmd == 1)					// je lance les builtins sans fork si il n'y a pas de pipes
+	if (shell->nb_cmd == 1)
 	{
-		//NEED TO REDIR IN OUT
-		//+ << IN FORK
-		//FUCK
 		if (!bin_normalise(shell->cmds[0].av))
 			return ;
 		else
-			if (ft_bin_solo(shell->cmds[0].av, &shell->env) == 1)
+			if (ft_bin_solo(shell->cmds[0].av, &shell->env, shell->cmds[0].redir_in.doc) == 1)
 				return ;
 	}
-	*/
-		i = -1;
-		while (++i < shell->nb_cmd)
+	i = -1;
+	while (++i < shell->nb_cmd)
+	{
+		if (i < shell->nb_cmd - 1)
+			pipe(p.new_end);
+		pid = fork();
+		if (pid == -1)
+			error_mess(NULL, "Error forking", NULL, 10);
+		else if (pid == 0)
 		{
-			if (i < shell->nb_cmd - 1)
-				pipe(p.new_end);
-			pid = fork();
-			if (pid == -1)
-				error_mess(NULL, "Error forking", NULL, 10);
-			else if (pid == 0)
+			if (bin_normalise(&shell->cmds[i].av[0]))
 			{
-				if (bin_normalise(&shell->cmds[i].av[0]))
-				{
-					cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
-					child_process(shell, &p, i, cmd_path);
-				}
-				exit(0);
+				cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
+				child_process(shell, &p, i, cmd_path);
 			}
-			else
-				parent_process(shell, &p, i, pid);
+			exit(0);
 		}
-		if (shell->nb_cmd > 1)
-			close_pipe(p.old_end);
+		else
+			parent_process(shell, &p, i, pid);
+	}
+	if (shell->nb_cmd > 1)
+		close_pipe(p.old_end);
 }

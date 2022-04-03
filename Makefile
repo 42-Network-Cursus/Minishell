@@ -10,8 +10,9 @@ PARS		=	main.c \
 				parsing/shell_level.c \
 				parsing/bin_check.c
 
-EXE			=	exec/exec.c\
-				exec/pipes.c
+EXE			=	exec/handle_bin.c\
+				exec/pipes.c \
+				exec/heredoc.c
 
 BIN			=	builtins/echo.c \
 				builtins/cd.c \

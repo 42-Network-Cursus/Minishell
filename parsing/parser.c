@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "exec.h"
+#include "builtins.h"
 
 int	get_nb_cmd(t_token *head)
 {
@@ -66,23 +68,22 @@ static void	set_names_to_null(t_mini *shell)
 	}
 }
 
-static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
+static int	create_tab_cmd(t_token *head, t_cmd *cmds, t_err_msg *er)
 {
 	while (head)
 	{
-		cmds[i].av = malloc(sizeof(char *) * (cmds[i].ac + 1));
-		if (!cmds[i].av)
+		cmds[er->i].av = malloc(sizeof(char *) * (cmds[er->i].ac + 1));
+		if (!cmds[er->i].av)
 			exit(1);
-		j = 0;
-		cmds[i].av[cmds[i].ac] = NULL;
+		cmds[er->i].av[cmds[er->i].ac] = NULL;
 		while (head && head->type != PIPE)
 		{
 			if (head->type == OTHER)
-				cmds[i].av[j++] = ft_strdup_2(head->data);
-			else if (head->type == REDIR_IN && redir(&cmds[i].redir_in, head))
-				return (free_cmds(cmds, i + 1));
-			else if (head->type == REDIR_OUT && redir(&cmds[i].redir_out, head))
-				return (free_cmds(cmds, i + 1));
+				cmds[er->i].av[er->j++] = ft_strdup_2(head->data);
+			else if (head->type == REDIR_IN && redir(&cmds[er->i].redir_in, head, er))
+				return (fill_err_var(er, &cmds[er->i], 1), 1);
+			else if (head->type == REDIR_OUT && redir(&cmds[er->i].redir_out, head, er))
+				return (fill_err_var(er, &cmds[er->i], 2), 1);
 			if (head->type == REDIR_IN || head->type == REDIR_OUT)
 				head = head->next;
 			if (head)
@@ -90,37 +91,35 @@ static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
 		}
 		if (head)
 			head = head->next;
-		i++;
+		er->i++;
 	}
 	return (0);
 }
 
 int	parser(t_mini *shell, char **input)
 {
-	t_token	*head;
-	int		i;
-	int		fd_error; //New var to check if < error (inexistant file)
+	t_token		*head;
+	t_err_msg	err;
 
-	i = 0;
+	err.i = 0;
+	err.j = 0;
 	head = NULL;
 	if (!ft_strtok(*input, &head, shell))
-		return (ft_error("Syntax error\n", 0));
+		return (ft_error("Syntax eror\n", 0));
 	shell->nb_cmd = get_nb_cmd(head);
 	shell->cmds = malloc(sizeof(t_cmd) * shell->nb_cmd);
 	if (!shell->cmds)
 		return (0);
 	fill_ac(shell, head);
 	set_names_to_null(shell);
-	
-	fd_error = create_tab_cmd(head, shell->cmds, 0, 0);
-	//loop heredoc, for every cmd redirect input aswell i think
-
-
-	//delete commented code here under ?
-	// while (shell->nb_cmd > i)
-	// {
-	// 	bin_normalise(&shell->cmds[i].av[0]);
-	// 	i++;
-	// }
+	if (create_tab_cmd(head, shell->cmds, &err))
+	{
+		if (find_heredoc(shell->cmds, shell->nb_cmd))
+			loop_heredoc(shell->cmds, shell->nb_cmd);
+		open(err.filename, err.flags, 0644);
+		ft_error(err.filename, 1);
+		free_cmds(shell->cmds, shell->nb_cmd);
+		return (free_tokens(&head), 0);
+	}
 	return (free_tokens(&head));
 }

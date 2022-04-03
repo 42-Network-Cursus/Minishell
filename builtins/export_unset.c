@@ -14,7 +14,7 @@
 #include "builtins.h"
 #include "exec.h"
 
-int	ft_export(char ***env, char **cmd) //
+int	ft_export(char ***env, char **cmd)
 {
 	char	**ret;
 	int		i;

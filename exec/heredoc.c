@@ -14,13 +14,68 @@
 #include "exec.h"
 #include "builtins.h"
 
-//TO CALL FCT USE
-//	if (shell->cmds[i].redir_in.doc)
-//		f_tmp = open_heredoc(shell->cmds[i].redir_in.doc);
+void	fill_err_var(t_err_msg *err, t_cmd *cmd, int redir)
+{
+	if (redir == 1)
+		err->filename = cmd->redir_in.file_name;
+	else if (redir == 2)
+		err->filename = cmd->redir_out.file_name;
+}
 
-//TO RUN SOMEWHERE INSIDE PARSER, IN A LOOP BEFORE CHECKING ALL CMDS AND REDIRS
+void	loop_heredoc(t_cmd *cmds, int nb_cmd)
+{
+	int	i;
+	int	fd;
 
-int	open_heredoc(t_here *doc	) //NOT SURE HOW TO MAKE SIGNALS WORK FOR CTRL-C
+	i = -1;
+	while (++i < nb_cmd)
+	{
+		if (cmds[i].redir_in.doc)
+		{
+			fd = open_heredoc(cmds[i].redir_in.doc);
+			close(fd);
+		}
+	}
+}
+
+int	find_heredoc(t_cmd *cmds, int nb_cmd)
+{
+	int	i;
+
+	if (cmds)
+	{
+		i = -1;
+		while (++i < nb_cmd)
+		{
+			if (cmds[i].redir_in.doc)
+				return (1);
+		}
+	}
+	return (0);
+}
+
+int	delim_is_input(char *input, char *delimiter)
+{
+	int	len;
+	int	i;
+
+	len = ft_strlen(input);
+	i = -1;
+	while (++i < len)
+	{
+		if (input[i] != delimiter[i])
+			return (0);
+	}
+	if (!input[i] && !delimiter[i])
+		return (1);
+	return (0);
+}
+
+
+//NOT SURE HOW TO MAKE SIGNALS WORK FOR CTRL-C
+//COPY OF MAIN SIGNAL_HANDLER DOES NOT WORK
+
+int	open_heredoc(t_here *doc)
 {
 	int		fd;
 	char	*input;
@@ -28,18 +83,18 @@ int	open_heredoc(t_here *doc	) //NOT SURE HOW TO MAKE SIGNALS WORK FOR CTRL-C
 	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
 	while (1)
 	{
-	//	signal(SIGQUIT, SIG_IGN); 
+	//	signal(SIGQUIT, SIG_IGN);
 	//	signal(SIGINT, signal_handler);
 		input = readline(">");
 	//	signal(SIGQUIT, SIG_IGN);
-		if (!input) //CTRL-D CHECK
+		if (!input)
 		{
 			if (unlink("heredoc"))
 				ft_exec_error("Unlink"); //TO REPLACE
 			close(fd);
 			exit(0);
 		}
-		if (*input && !ft_strncmp(input, doc->delimiter, ft_strlen(input)))
+		if (*input && delim_is_input(input, doc->delimiter))
 		{
 			if (doc->next == NULL)
 			{

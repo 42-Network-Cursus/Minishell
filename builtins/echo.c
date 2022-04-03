@@ -14,11 +14,16 @@
 #include "builtins.h"
 #include "exec.h"
 
+//1.
 //Problem?
 //BASH echo 1 2\\n 3 -> Output 1 2\n 3
 //				Minishell Output 1 2
 //								  3
-	
+//In pdf: Shell should not interpret unclosed quotes or special characters which are not required by the
+//	subject such as \ (backslash)
+// Not a problem donc ?
+
+//2.
 //IMPLEMENT $? INSIDE ECHO
 
 typedef struct s_var
@@ -74,7 +79,7 @@ static int	echo_process(t_var *v, char **cmd)
 	if (!cmd[(*v).f + (*v).k])
 	{
 		if (!(*v).f)
-			write(1, "\n", 1); //PIPE NEEDED FOR STDOUT ??
+			write(1, "\n", 1);
 		return (1);
 	}
 	return (0);
@@ -97,7 +102,7 @@ int	ft_echo(char **cmd)
 		{
 			ft_putstr_fd(cmd[v.f + v.k], 1);
 			if (cmd[v.f + v.k + 1])
-				write(1, " ", 1); // PIPE ?
+				write(1, " ", 1);
 			v.k++;
 		}
 	}
@@ -105,6 +110,6 @@ int	ft_echo(char **cmd)
 		write(1, "%%", 1);
 	if (v.f && is_nl_end(cmd))
 		return (1);
-	write(1, "\n", 1); // PIPE ?
+	write(1, "\n", 1);
 	return (1);
 }

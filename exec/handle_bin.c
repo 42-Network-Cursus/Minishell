@@ -26,9 +26,14 @@ void	ft_minimize(char ***cmd)
 	}
 }
 
-int	ft_bin_solo(char **cmd, char ***env) //why needed ?
+int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 {
 	ft_minimize(&cmd);
+	if (ft_bin_heredoc(cmd))
+	{
+		if (doc)
+			open_heredoc(doc);
+	}
 	if (!ncmp(cmd[0], "cd", 2))
 		return (ft_cd(cmd));
 	if (!ncmp(cmd[0], "export", 6))
@@ -64,4 +69,17 @@ int	ft_bin(char ***env, char **cmd, t_pipes p)
 		return (exit(0), 1);
 	}
 	return (8);
+}
+
+int	ft_bin_heredoc(char **cmd)
+{
+	if (!ncmp(cmd[0], "cd", 2))
+		return (1);
+	if (!ncmp(cmd[0], "export", 6))
+		return (1);
+	if (!ncmp(cmd[0], "unset", 5))
+		return (1);
+	if (!ncmp(cmd[0], "exit", 4))
+		return (1);
+	return (0);
 }
