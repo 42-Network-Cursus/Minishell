@@ -14,13 +14,16 @@
 #include "builtins.h"
 #include "exec.h"
 
-// FCT TO DEL, REPLACED BY ERROR_MESS()
-void	ft_exec_error(char *str)
+void	signal_handler2(int signum)
 {
-	perror(str);
-	exit(EXIT_FAILURE);
+	if (signum == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		ges = 130;
+	}
 }
-
 
 char	*ft_cmd_path(char **env, char *cmd)
 {
@@ -108,6 +111,8 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 {
 	int		ret;
 
+	//SIGNAL TESTING
+//	signal(SIGQUIT, SIG_IGN);
 	check_in_out_redir(shell, p, i);
 	if (p->f_out != 1)
 		my_dup(p->f_out, 1);
@@ -165,12 +170,20 @@ void	ft_exec_cmd(t_mini *shell)
 	{
 		if (i < shell->nb_cmd - 1)
 			pipe(p.new_end);
+		if (shell->cmds[i].redir_in.doc)
+		{
+			signal(SIGQUIT, SIG_IGN);
+//			signal(SIGINT, signal_handler2);
+		}
+		signal(SIGINT, signal_handler2);
 		pid = fork();
 		if (pid == -1)
 			error_mess(NULL, "Error forking", NULL, 10);
 		else if (pid == 0)
 		{
-			if (bin_normalise(&shell->cmds[i].av[0]))
+			if (!shell->cmds[i].redir_in.doc)
+				signal(SIGQUIT, signal_handler2);
+			if (bin_normalise(&shell->cmds[i].av[0]))	
 			{
 				cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
 				child_process(shell, &p, i, cmd_path);

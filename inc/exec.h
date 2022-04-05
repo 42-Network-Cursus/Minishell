@@ -45,7 +45,9 @@ int		ft_bin_heredoc(char **cmd);
 int		find_heredoc(t_cmd *cmds, int nb_cmd);
 void	loop_heredoc(t_cmd *cmds, int nb_cmd);
 int		open_heredoc(t_here *doc);
-void	fill_err_var(t_err_msg *err, t_cmd *cmd, int redir);
 int		delim_is_input(char *input, char *delimiter);
+
+//TESTING
+void	signal_handler2(int signum);
 
 #endif
