@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
-#include "exec.h"
 
 static int	unset_2(char ***env, int i, char **ret)
 {

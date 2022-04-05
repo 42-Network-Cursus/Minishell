@@ -13,7 +13,6 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include "exec.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -23,6 +22,8 @@
 # include <fcntl.h>
 # include "../libft/libft.h"
 # include <signal.h>
+# include "minishell.h"
+# include "exec.h"
 
 void	get_cd(char **buf);
 int		ft_pwd(char **cmd, t_pipes p);

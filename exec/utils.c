@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
-#include "builtins.h"
+#include "minishell.h"
 
 void	unlink_error(void)
 {

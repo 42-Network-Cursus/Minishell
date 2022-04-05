@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "../libft/libft.h"
 
 static char	*delete_macro(char *str, int macro_len, int strlen)
 {

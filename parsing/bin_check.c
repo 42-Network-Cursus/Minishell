@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
-#include "exec.h"
 
 static	int	dup_from(char **s1, int from)
 {

@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
-#include "exec.h"
 
 void	signal_handler2(int signum)
 {

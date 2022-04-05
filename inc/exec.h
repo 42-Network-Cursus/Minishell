@@ -20,9 +20,10 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include "minishell.h"
 # include <signal.h>
 # include <errno.h>
+# include "minishell.h"
+# include "builtins.h"
 
 typedef struct s_pipes
 {

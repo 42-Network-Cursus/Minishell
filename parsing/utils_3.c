@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "../libft/libft.h"
 
 void	*ft_calloc_1(size_t nmemb, size_t size)
 {

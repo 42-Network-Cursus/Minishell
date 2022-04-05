@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "../libft/libft.h"
 
 t_here	*ft_lstlast_2(t_here *lst)
 {

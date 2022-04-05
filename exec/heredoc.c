@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "exec.h"
-#include "builtins.h"
 
 void	loop_heredoc(t_cmd *cmds, int nb_cmd)
 {
