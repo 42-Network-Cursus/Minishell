@@ -41,8 +41,8 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 
 void	dup_and_close_pipe(int end, int fd, int *ends)
 {
-		my_dup(end, fd);
-		close_pipe(ends);
+	my_dup(end, fd);
+	close_pipe(ends);
 }
 
 void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
@@ -101,7 +101,7 @@ void	ft_exec_cmd(t_mini *shell)
 		if (!bin_normalise(shell->cmds[0].av))
 			return ;
 		else
-			if (ft_bin_solo(shell->cmds[0].av, &shell->env, shell->cmds[0].r_in.doc) == 1)
+			if (ft_bin_solo(shell->cmds[0].av, &shell->env, shell->cmds[0].r_in.doc) == 1) //line too long
 				return ;
 	}
 	i = -1;
