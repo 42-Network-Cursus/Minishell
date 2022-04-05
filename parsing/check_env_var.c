@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 static char	*delete_macro(char *str, int macro_len, int strlen)
 {

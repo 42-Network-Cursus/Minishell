@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 static void	free_many(char *buf, char *new_dest)
 {

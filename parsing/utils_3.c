@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 void	*ft_calloc_1(size_t nmemb, size_t size)
 {

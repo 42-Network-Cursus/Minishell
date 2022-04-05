@@ -21,8 +21,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/stat.h>
-//# include "exec.h"
-//# include "builtins.h"
 
 # define OTHER 0
 # define PIPE 1

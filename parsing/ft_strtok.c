@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
+#include "exec.h"
 
 static char	*remove_unwanted_quotes(char *str, int i, int j)
 {
