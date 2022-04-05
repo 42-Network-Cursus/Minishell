@@ -48,8 +48,13 @@ void	loop_heredoc(t_cmd *cmds, int nb_cmd);
 int		open_heredoc(t_here *doc);
 int		delim_is_input(char *input, char *delimiter);
 
+// Utils.c
 void	unlink_error(void);
 void	signal_handler2(int signum);
+void	my_dup(int a, int b);
+void	close_pipe(int *end);
+char	*ft_cmd_path(char **env, char *cmd);
+
 int		handle_found_delim(t_here *doc, char *input, int fd);
 
 #endif
