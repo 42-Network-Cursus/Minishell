@@ -40,7 +40,7 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 }
 
 
-void	dup_&&_close_pipe(int end, int fd, int *ends)
+void	dup_and_close_pipe(int end, int fd, int *ends)
 {
 		my_dup(end, fd);
 		close_pipe(ends);
@@ -56,7 +56,7 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 	if (p->f_in != 0)
 		my_dup(p->f_in, 0);
 	if (i > 0)
-		dup_&&_close_pipe(p->old_end[0], p->f_in, p->old_end);
+		dup_and_close_pipe(p->old_end[0], p->f_in, p->old_end);
 	if (i + 1 < shell->nb_cmd)
 	{
 		my_dup(p->new_end[1], p->f_out);
