@@ -58,7 +58,7 @@ static	int	export_check(char **cmd)
 	if (!cmd[1])
 	{
 		write(1, "export: arg required\n", 21);
-		*ges = 1;
+		ges = 1;
 		return (0);
 	}
 	while (cmd[1][i])

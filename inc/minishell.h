@@ -28,7 +28,7 @@
 # define REDIR_OUT 3
 # define SPACE 4
 
-int *ges;
+int ges;
 
 typedef struct s_token
 {

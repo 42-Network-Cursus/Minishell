@@ -20,6 +20,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include "builtins.h"
 # include "minishell.h"
 # include <signal.h>
 # include <errno.h>
@@ -47,7 +48,8 @@ void	loop_heredoc(t_cmd *cmds, int nb_cmd);
 int		open_heredoc(t_here *doc);
 int		delim_is_input(char *input, char *delimiter);
 
-//TESTING
+void	unlink_error(void);
 void	signal_handler2(int signum);
+int		handle_found_delim(t_here *doc, char *input, int fd);
 
 #endif

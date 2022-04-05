@@ -39,7 +39,7 @@ int	error_mess(char *s, char *mess, char *cmd, int exstat)
 	if (cmd)
 		write(2, cmd, ft_strlen(cmd));
 	write(2, "\n", 1);
-	*ges = exstat;
+	ges = exstat;
 	return (1);
 }
 

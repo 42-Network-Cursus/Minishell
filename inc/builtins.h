@@ -20,10 +20,10 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include "exec.h"
 # include "../libft/libft.h"
 # include "exec.h"
 # include <signal.h>
-
 
 void	get_cd(char **buf);
 int	    ft_pwd(char **cmd, t_pipes p);

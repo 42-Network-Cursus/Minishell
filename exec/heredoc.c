@@ -64,7 +64,7 @@ int	delim_is_input(char *input, char *delimiter)
 	return (0);
 }
 
-void	handle_found_delim(t_here *doc, char *input, int fd)
+int	handle_found_delim(t_here *doc, char *input, int fd)
 {
 	if (doc->next == NULL)
 	{
@@ -81,6 +81,7 @@ void	handle_found_delim(t_here *doc, char *input, int fd)
 		close(fd);
 		fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
 	}
+	return (0);
 }
 
 int	open_heredoc(t_here *doc)
@@ -101,7 +102,7 @@ int	open_heredoc(t_here *doc)
 			exit(0);
 		}
 		if (*input && delim_is_input(input, doc->delimiter))
-			handle_found_delim(doc, input, fd);
+			fd = handle_found_delim(doc, input, fd);
 		else
 			ft_putendl_fd(input, fd);
 		free(input);
