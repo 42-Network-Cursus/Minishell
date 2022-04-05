@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:47:50 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 16:17:44 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 18:12:53 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,12 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 		exit(0);
 	if (ret == 8)
 	{
-		if (execve(cmd_path, shell->cmds[i].av, shell->env) == -1)
+		ret = execve(cmd_path, shell->cmds[i].av, shell->env);
+		if (ret == -1)
+		{
 			error_mess("Minishell: ", shell->cmds[i].av[0], ": command not found", 127);
+			exit(2);
+		}
 	}
 }
 
@@ -142,6 +146,9 @@ void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
 		p->old_end[0] = p->new_end[0];
 		p->old_end[1] = p->new_end[1];
 	}
+	wait(&ges);
+	if (ges == 512)
+		ges = 127;
 	waitpid(pid, NULL, 0);
 }
 

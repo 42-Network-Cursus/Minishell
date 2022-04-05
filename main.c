@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/04/05 16:59:00 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 17:42:41 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	signal_handler(int signum)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
-		*ges = 130;
+		ges = 130;
 	}
 }
 
@@ -98,13 +98,11 @@ int	main(int argc, char **argv, char *envp[])
 {
 	t_mini	shell;
 	char	*input;
-	int		ret;
 
 	(void)argc;
 	(void)argv;
 	input = NULL;
-	ret = 0;
-	ges = &ret;
+	ges = 0;
 	shell.env = malloc_envp(envp, 0);
 	shell_loop(&shell, &input);
 	free_env(shell.env);

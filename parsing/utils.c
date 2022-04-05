@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:56:08 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/04/05 16:59:40 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 18:17:12 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ char	*ft_itoa2(int n)
 	i = n_len(n);
 	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
-		return (NULL);
+		exit(1);
 	if (n == 0)
 		str[0] = '0';
 	str[i--] = '\0';
@@ -280,5 +280,6 @@ char	*ft_itoa2(int n)
 		n /= 10;
 		i--;
 	}
-	return (*ges = 0, str);
+	ges = 0 ;
+	return (ges = 0, str);
 }

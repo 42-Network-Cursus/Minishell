@@ -7,7 +7,6 @@ PARS		=	main.c \
 				parsing/utils.c \
 				parsing/parser_utils.c \
 				parsing/check_env_var.c \
-				parsing/shell_level.c \
 				parsing/bin_check.c
 
 EXE			=	exec/handle_bin.c\
