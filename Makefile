@@ -19,7 +19,10 @@ BIN			=	builtins/echo.c \
 				builtins/export.c \
 				builtins/unset.c \
 				builtins/pwd_env_exit.c \
-				builtins/utils.c 
+				builtins/utils.c \
+				builtins/utils_2.c \
+				builtins/utils_3.c \
+				builtins/utils_4.c 
 				
 LIBFT		= ./libft/
 

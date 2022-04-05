@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:07:30 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/31 16:07:12 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:03:42 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ int	parser(t_mini *shell, char **input)
 	create_tab_cmd(head, shell->cmds, 0, 0);
 	if (find_heredoc(shell->cmds, shell->nb_cmd) && !shell->cmds[0].av[0])
 	{
-//		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler2);
 		pid = fork();
 		if (pid == 0)

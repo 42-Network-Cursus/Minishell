@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:13:21 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/04/05 17:42:08 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:02:51 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static char	*get_env_var(char *str, int strlen, int i, t_mini *shell)
 		macro_len++;
 	macro = ft_substr_2(str, i, macro_len);
 	if (str[i] == '?')
-		var = ft_itoa2(ges);
+		var = ft_itoa2(g_es);
 	else
 		var = ft_getenv(macro, shell->env);
 	if (!var)

@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 11:54:46 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 17:59:40 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:02:48 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	error_mess(char *s, char *mess, char *cmd, int exstat)
 	if (cmd)
 		write(2, cmd, ft_strlen(cmd));
 	write(2, "\n", 1);
-	ges = exstat;
+	g_es = exstat;
 	return (1);
 }
 

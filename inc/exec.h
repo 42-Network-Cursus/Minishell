@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/15 11:48:45 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 16:40:23 by mtournay         ###   ########.fr       */
+/*   Created: 2022/04/05 19:09:45 by mtournay          #+#    #+#             */
+/*   Updated: 2022/04/05 19:13:56 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include "builtins.h"
 # include "minishell.h"
 # include <signal.h>
 # include <errno.h>
@@ -29,12 +28,12 @@ typedef struct s_pipes
 {
 	int		new_end[2];
 	int		old_end[2];
-	int 	f_in;
+	int		f_in;
 	int		f_out;
 }				t_pipes;
 
 char	*ft_cmd_path(char **env, char *cmd);
-int		ft_execute(char **cmd, char **envp); 
+int		ft_execute(char **cmd, char **envp);
 void	ft_exec_error(char *str);
 int		ft_bin_solo(char **cmd, char ***env, t_here *doc);
 int		ft_bin(char ***env, char **cmd, t_pipes p);

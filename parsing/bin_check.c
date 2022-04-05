@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 12:01:34 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 16:52:35 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 18:42:06 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ static	int	dup_from(char **s1, int from)
 	return (1);
 }
 
-int	bin_normalise(char **str) 
+int	bin_normalise(char **str)
 {
-	int	i;
-    int len;
+	int		i;
+	int		len;
 
 	i = 0;
-    len = 0;
+	len = 0;
 	if (!str)
 		return (0);
-    if ((*str)[0] == '/')
+	if ((*str)[0] == '/')
 	{
 		if (!access(*str, 0))
 		{

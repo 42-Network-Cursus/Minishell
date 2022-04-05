@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:29 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 17:49:08 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:02:47 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ static	int	export_check(char **cmd)
 	if (!cmd[1])
 	{
 		write(1, "export: arg required\n", 21);
-
-		 ges = 1;
-
+		g_es = 1;
 		return (0);
 	}
 	while (cmd[1][i])

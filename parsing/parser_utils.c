@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:15:17 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/28 14:50:47 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:08:43 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	redir(t_red *red, t_token *head)
 		red->flags = (O_CREAT | O_APPEND | O_RDWR);
 	else if (!ft_strncmp_2(head->data, "<<", 2))
 		return (red->file_name = NULL, ft_lstadd_back_2(&red->doc,
-				ft_lstnew_2(ft_strdup_2(head->next->data))), 
+				ft_lstnew_2(ft_strdup_2(head->next->data))),
 			red->flags = -1, 0);
 	else if (!ft_strncmp_2(head->data, ">", 1))
 		red->flags = (O_CREAT | O_TRUNC | O_RDWR);

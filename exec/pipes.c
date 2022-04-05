@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwastche <cwastche@student.s19.be>         +#+  +:+       +#+        */
+/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 17:23:12 by cwastche          #+#    #+#             */
-/*   Updated: 2022/04/05 17:23:14 by cwastche         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:02:50 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	signal_handler2(int signum)
 		rl_replace_line("", 0);
 		write(1, "\n", 1);
 		rl_on_new_line();
-		ges = 130;
+		g_es = 130;
 	}
 }
 
@@ -146,9 +146,9 @@ void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
 		p->old_end[0] = p->new_end[0];
 		p->old_end[1] = p->new_end[1];
 	}
-	wait(&ges);
-	if (ges == 512)
-		ges = 127;
+	wait(&g_es);
+	if (g_es == 512)
+		g_es = 127;
 	waitpid(pid, NULL, 0);
 }
 
@@ -196,4 +196,4 @@ void	ft_exec_cmd(t_mini *shell)
 		close_pipe(p.old_end);
 }
 
-EXIT_SUCCESS EXIT_FAILURE
+//EXIT_SUCCESS EXIT_FAILURE

@@ -6,12 +6,11 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 13:53:54 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/29 13:54:14 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:03:25 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 static size_t	custom_len(char const *s, size_t start, size_t len)
 {

@@ -6,13 +6,14 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:03:17 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/04 16:31:38 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 18:53:51 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
+# include "exec.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -20,25 +21,23 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include "exec.h"
 # include "../libft/libft.h"
-# include "exec.h"
 # include <signal.h>
 
 void	get_cd(char **buf);
-int	    ft_pwd(char **cmd, t_pipes p);
-int	    ft_cd(char **cmd);
-int	    ft_echo(char **cmd);
-int	    ft_unset(char ***env, char **cmd);
-int	    ft_export(char ***env, char **cmd);
-int	    ft_env(char **env, char **cmd, t_pipes p);
-int	    ft_exit(char **cmd);
+int		ft_pwd(char **cmd, t_pipes p);
+int		ft_cd(char **cmd);
+int		ft_echo(char **cmd);
+int		ft_unset(char ***env, char **cmd);
+int		ft_export(char ***env, char **cmd);
+int		ft_env(char **env, char **cmd, t_pipes p);
+int		ft_exit(char **cmd);
 
-int 	cmp(char *s1, char *s2);
-int	    ncmp(char *s1, char *s2, size_t n);
+int		cmp(char *s1, char *s2);
+int		ncmp(char *s1, char *s2, size_t n);
 void	nl_convert(char ***s);
 void	nl_convert_process(char **s);
-int	    bin_normalise(char **str);
+int		bin_normalise(char **str);
 
 int		error_mess(char *s, char *mess, char *cmd, int exstat);
 int		bin_cmd(char ***env, char **cmd);

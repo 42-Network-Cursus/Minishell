@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/04/05 17:41:23 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 19:03:03 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define REDIR_OUT 3
 # define SPACE 4
 
-int ges;
+int		g_es;
 
 typedef struct s_token
 {
