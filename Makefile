@@ -12,7 +12,8 @@ PARS		=	main.c \
 
 EXE			=	exec/handle_bin.c\
 				exec/pipes.c \
-				exec/heredoc.c
+				exec/heredoc.c \
+				exec/utils.c
 
 BIN			=	builtins/echo.c \
 				builtins/cd.c \

@@ -30,14 +30,6 @@
 
 int	ges;
 
-typedef struct s_err_msg
-{
-	int		flags;
-	char	*filename;
-	int		i;
-	int		j;
-}				t_err_msg;
-
 typedef struct s_token
 {
 	char			*data;
@@ -80,7 +72,7 @@ int		parser(t_mini *shell, char **input);
 
 // parser_utils.c
 
-int		redir(t_red *red, t_token *head, t_err_msg *err);
+int		redir(t_red *red, t_token *head);
 int		free_cmds(t_cmd *cmds, int nb_cmd);
 int		free_tokens(t_token **head);
 void	rl_replace_line(const char *text, int clear_undo);

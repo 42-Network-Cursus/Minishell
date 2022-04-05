@@ -71,13 +71,11 @@ static void	shell_loop(t_mini *shell, char **input)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler);
 		*input = readline("Minishell 🐚$ ");
-		signal(SIGQUIT, SIG_IGN);
 		if ((!*input) && write(2, "\b\bexit\n", 7))
 			break ;
 		if (!**input)
 			continue ;
 		add_history(*input);
-		//Input already malloc'd, + strtrim mallocs new instance. Need to use a tmp var to free OG input, else SEGV on white space only cmd.
 		*input = ft_strtrim_2(*input, " ");
 		shell->nb_cmd = 0;
 		shell->cmds = NULL;
@@ -86,8 +84,8 @@ static void	shell_loop(t_mini *shell, char **input)
 		if (*input != 0 && !delim_is_input(*input, ""))
 		{
 			free(*input);
-			ft_exec_cmd(shell);
-			free_cmds(shell->cmds, shell->nb_cmd);
+			if (shell->cmds[0].av[0])
+				ft_exec_cmd(shell);
 		}
 	}
 	if (shell->nb_cmd > 0)

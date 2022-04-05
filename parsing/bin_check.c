@@ -31,8 +31,6 @@ static	int	dup_from(char **s1, int from)
 	return (1);
 }
 
-
-//EMPTY CMD (White spaces) MAKES THIS SEGFAULT
 int	bin_normalise(char **str) 
 {
 	int	i;
