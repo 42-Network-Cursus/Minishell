@@ -14,41 +14,6 @@
 #include "builtins.h"
 #include "exec.h"
 
-void	signal_handler2(int signum)
-{
-	if (signum == SIGINT)
-	{
-		rl_replace_line("", 0);
-		write(1, "\n", 1);
-		rl_on_new_line();
-		g_es = 130;
-	}
-}
-
-char	*ft_cmd_path(char **env, char *cmd)
-{
-	int		i;
-	char	**paths;
-
-	i = 0;
-	if (cmd[0] == '.' && cmd[1] == '/')
-		return (cmd);
-	while (!ft_strnstr(env[i], "PATH=", 5) && env[i])
-		i++;
-	env[i] = ft_substr(env[i], 6, ft_strlen(env[i]));
-	paths = ft_split(env[i], ':');
-	i = -1;
-	while (paths && paths[++i])
-	{
-		paths[i] = ft_strjoin(paths[i], "/");
-		paths[i] = ft_strjoin(paths[i], cmd);
-		if (!access(paths[i], F_OK) && !access(paths[i], X_OK))
-			return (paths[i]);
-		free(paths[i]);
-	}
-	return (0);
-}
-
 void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 {
 	char	*red_inf;
@@ -71,36 +36,6 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 		p->f_out = open(red_outf, shell->cmds[i].redir_out.flags);
 		if (p->f_out < 0)
 			error_mess("minishell: ", shell->cmds[i].redir_out.file_name, ": No such file or directory", 1);
-	}
-}
-
-void	close_pipe(int *end)
-{
-	int	ret;
-
-	ret = close(end[0]);
-	if (ret == -1)
-	{
-		error_mess("minishell: ", "failed to close pipe", NULL, 1);
-		exit(1);
-	}
-	ret = close(end[1]);
-	if (ret == -1)
-	{
-		error_mess("minishell: ", "failed to close pipe", NULL, 1);
-		exit(1);
-	}
-}
-
-void	my_dup(int a, int b)
-{
-	int	ret;
-
-	ret = dup2(a, b);
-	if (ret == -1)
-	{
-		error_mess("minishell: ", "failed to redirect output", NULL, 1);
-		exit(1);
 	}
 }
 
@@ -195,5 +130,3 @@ void	ft_exec_cmd(t_mini *shell)
 	if (shell->nb_cmd > 1)
 		close_pipe(p.old_end);
 }
-
-//EXIT_SUCCESS EXIT_FAILURE
