@@ -20,6 +20,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include "builtins.h"
 # include "minishell.h"
 # include <signal.h>
 # include <errno.h>
@@ -45,7 +46,10 @@ int		ft_bin_heredoc(char **cmd);
 int		find_heredoc(t_cmd *cmds, int nb_cmd);
 void	loop_heredoc(t_cmd *cmds, int nb_cmd);
 int		open_heredoc(t_here *doc);
-void	fill_err_var(t_err_msg *err, t_cmd *cmd, int redir);
 int		delim_is_input(char *input, char *delimiter);
+
+void	unlink_error(void);
+void	signal_handler2(int signum);
+int		handle_found_delim(t_here *doc, char *input, int fd);
 
 #endif

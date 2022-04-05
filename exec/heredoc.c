@@ -14,19 +14,12 @@
 #include "exec.h"
 #include "builtins.h"
 
-void	fill_err_var(t_err_msg *err, t_cmd *cmd, int redir)
-{
-	if (redir == 1)
-		err->filename = cmd->redir_in.file_name;
-	else if (redir == 2)
-		err->filename = cmd->redir_out.file_name;
-}
-
 void	loop_heredoc(t_cmd *cmds, int nb_cmd)
 {
 	int	i;
 	int	fd;
 
+	signal(SIGINT, signal_handler2);
 	i = -1;
 	while (++i < nb_cmd)
 	{
@@ -71,9 +64,25 @@ int	delim_is_input(char *input, char *delimiter)
 	return (0);
 }
 
-
-//NOT SURE HOW TO MAKE SIGNALS WORK FOR CTRL-C
-//COPY OF MAIN SIGNAL_HANDLER DOES NOT WORK
+int	handle_found_delim(t_here *doc, char *input, int fd)
+{
+	if (doc->next == NULL)
+	{
+		free(input);
+		close(fd);
+		fd = open("heredoc", O_RDONLY, 0666);
+		if (unlink("heredoc"))
+			unlink_error();
+		return (fd);
+	}
+	else
+	{
+		doc = doc->next;
+		close(fd);
+		fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
+	}
+	return (0);
+}
 
 int	open_heredoc(t_here *doc)
 {
@@ -81,42 +90,21 @@ int	open_heredoc(t_here *doc)
 	char	*input;
 
 	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
+	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
-	//	signal(SIGQUIT, SIG_IGN);
-	//	signal(SIGINT, signal_handler);
 		input = readline(">");
-	//	signal(SIGQUIT, SIG_IGN);
 		if (!input)
 		{
 			if (unlink("heredoc"))
-				ft_exec_error("Unlink"); //TO REPLACE
+				unlink_error();
 			close(fd);
 			exit(0);
 		}
 		if (*input && delim_is_input(input, doc->delimiter))
-		{
-			if (doc->next == NULL)
-			{
-				free(input);
-				close(fd);
-				fd = open("heredoc", O_RDONLY, 0666);
-				if (unlink("heredoc"))
-					ft_exec_error("Unlink"); //TO REPLACE
-				return (fd);
-			}
-			else
-			{
-				doc = doc->next;
-				close(fd);
-				fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
-			}
-		}
+			fd = handle_found_delim(doc, input, fd);
 		else
-		{
-			write(fd, input, ft_strlen(input));
-			write(fd, "\n", 1);
-		}
+			ft_putendl_fd(input, fd);
 		free(input);
 	}
 	return (0);

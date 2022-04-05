@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cwastche <cwastche@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/15 10:47:50 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 18:12:53 by mtournay         ###   ########.fr       */
+/*   Created: 2022/04/05 17:23:12 by cwastche          #+#    #+#             */
+/*   Updated: 2022/04/05 17:23:14 by cwastche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 #include "builtins.h"
 #include "exec.h"
 
-// FCT TO DEL, REPLACED BY ERROR_MESS()
-void	ft_exec_error(char *str)
+void	signal_handler2(int signum)
 {
-	perror(str);
-	exit(EXIT_FAILURE);
+	if (signum == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		ges = 130;
+	}
 }
-
 
 char	*ft_cmd_path(char **env, char *cmd)
 {
@@ -28,7 +31,7 @@ char	*ft_cmd_path(char **env, char *cmd)
 	char	**paths;
 
 	i = 0;
-	if(cmd[0] == '.' && cmd[1] == '/')
+	if (cmd[0] == '.' && cmd[1] == '/')
 		return (cmd);
 	while (!ft_strnstr(env[i], "PATH=", 5) && env[i])
 		i++;
@@ -45,8 +48,6 @@ char	*ft_cmd_path(char **env, char *cmd)
 	}
 	return (0);
 }
-
-
 
 void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 {
@@ -69,9 +70,8 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 	{
 		p->f_out = open(red_outf, shell->cmds[i].redir_out.flags);
 		if (p->f_out < 0)
-			error_mess("minishell: ", shell->cmds[i].redir_out.file_name,  ": No such file or directory", 1);
+			error_mess("minishell: ", shell->cmds[i].redir_out.file_name, ": No such file or directory", 1);
 	}
-		
 }
 
 void	close_pipe(int *end)
@@ -79,13 +79,13 @@ void	close_pipe(int *end)
 	int	ret;
 
 	ret = close(end[0]);
-	if(ret == -1)
+	if (ret == -1)
 	{
 		error_mess("minishell: ", "failed to close pipe", NULL, 1);
 		exit(1);
 	}
 	ret = close(end[1]);
-	if(ret == -1)
+	if (ret == -1)
 	{
 		error_mess("minishell: ", "failed to close pipe", NULL, 1);
 		exit(1);
@@ -94,10 +94,10 @@ void	close_pipe(int *end)
 
 void	my_dup(int a, int b)
 {
-	int ret;
+	int	ret;
 
 	ret = dup2(a, b);
-	if(ret == -1)
+	if (ret == -1)
 	{
 		error_mess("minishell: ", "failed to redirect output", NULL, 1);
 		exit(1);
@@ -154,9 +154,9 @@ void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
 
 void	ft_exec_cmd(t_mini *shell)
 {
-	int 	i;
-	pid_t 	pid;
-	t_pipes p;
+	int		i;
+	pid_t	pid;
+	t_pipes	p;
 	char	*cmd_path;
 
 	if (shell->nb_cmd == 1)
@@ -172,11 +172,16 @@ void	ft_exec_cmd(t_mini *shell)
 	{
 		if (i < shell->nb_cmd - 1)
 			pipe(p.new_end);
+		if (shell->cmds[i].redir_in.doc)
+			signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, signal_handler2);
 		pid = fork();
 		if (pid == -1)
 			error_mess(NULL, "Error forking", NULL, 10);
 		else if (pid == 0)
 		{
+			if (!shell->cmds[i].redir_in.doc)
+				signal(SIGQUIT, signal_handler2);
 			if (bin_normalise(&shell->cmds[i].av[0]))
 			{
 				cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
@@ -190,3 +195,5 @@ void	ft_exec_cmd(t_mini *shell)
 	if (shell->nb_cmd > 1)
 		close_pipe(p.old_end);
 }
+
+EXIT_SUCCESS EXIT_FAILURE

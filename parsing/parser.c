@@ -68,22 +68,23 @@ static void	set_names_to_null(t_mini *shell)
 	}
 }
 
-static int	create_tab_cmd(t_token *head, t_cmd *cmds, t_err_msg *er)
+static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
 {
 	while (head)
 	{
-		cmds[er->i].av = malloc(sizeof(char *) * (cmds[er->i].ac + 1));
-		if (!cmds[er->i].av)
+		cmds[i].av = malloc(sizeof(char *) * (cmds[i].ac + 1));
+		if (!cmds[i].av)
 			exit(1);
-		cmds[er->i].av[cmds[er->i].ac] = NULL;
+		j = 0;
+		cmds[i].av[cmds[i].ac] = NULL;
 		while (head && head->type != PIPE)
 		{
 			if (head->type == OTHER)
-				cmds[er->i].av[er->j++] = ft_strdup_2(head->data);
-			else if (head->type == REDIR_IN && redir(&cmds[er->i].redir_in, head, er))
-				return (fill_err_var(er, &cmds[er->i], 1), 1);
-			else if (head->type == REDIR_OUT && redir(&cmds[er->i].redir_out, head, er))
-				return (fill_err_var(er, &cmds[er->i], 2), 1);
+				cmds[i].av[j++] = ft_strdup_2(head->data);
+			else if (head->type == REDIR_IN && redir(&cmds[i].redir_in, head))
+				continue ;
+			else if (head->type == REDIR_OUT && redir(&cmds[i].redir_out, head))
+				continue ;
 			if (head->type == REDIR_IN || head->type == REDIR_OUT)
 				head = head->next;
 			if (head)
@@ -91,7 +92,7 @@ static int	create_tab_cmd(t_token *head, t_cmd *cmds, t_err_msg *er)
 		}
 		if (head)
 			head = head->next;
-		er->i++;
+		i++;
 	}
 	return (0);
 }
@@ -99,27 +100,26 @@ static int	create_tab_cmd(t_token *head, t_cmd *cmds, t_err_msg *er)
 int	parser(t_mini *shell, char **input)
 {
 	t_token		*head;
-	t_err_msg	err;
+	pid_t		pid;
 
-	err.i = 0;
-	err.j = 0;
 	head = NULL;
 	if (!ft_strtok(*input, &head, shell))
-		return (ft_error("Syntax eror\n", 0));
+		return (ft_error("Syntax error\n", 0));
 	shell->nb_cmd = get_nb_cmd(head);
 	shell->cmds = malloc(sizeof(t_cmd) * shell->nb_cmd);
 	if (!shell->cmds)
 		return (0);
 	fill_ac(shell, head);
 	set_names_to_null(shell);
-	if (create_tab_cmd(head, shell->cmds, &err))
+	create_tab_cmd(head, shell->cmds, 0, 0);
+	if (find_heredoc(shell->cmds, shell->nb_cmd) && !shell->cmds[0].av[0])
 	{
-		if (find_heredoc(shell->cmds, shell->nb_cmd))
+//		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, signal_handler2);
+		pid = fork();
+		if (pid == 0)
 			loop_heredoc(shell->cmds, shell->nb_cmd);
-		open(err.filename, err.flags, 0644);
-		ft_error(err.filename, 1);
-		free_cmds(shell->cmds, shell->nb_cmd);
-		return (free_tokens(&head), 0);
+		waitpid(pid, 0, 0);
 	}
 	return (free_tokens(&head));
 }
