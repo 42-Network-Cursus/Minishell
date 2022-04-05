@@ -6,25 +6,13 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 17:23:42 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 19:19:31 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:19:59 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
-
-//1.
-//Problem?
-//BASH echo 1 2\\n 3 -> Output 1 2\n 3
-//				Minishell Output 1 2
-//								  3
-//In pdf: Shell should not interpret unclosed quotes or special characters which are not required by the
-//	subject such as \ (backslash)
-// Not a problem donc ?
-
-//2.
-//IMPLEMENT $? INSIDE ECHO
 
 typedef struct s_var
 {
@@ -42,22 +30,6 @@ static void	init(t_var *v)
 	(*v).i = 0;
 	(*v).k = 1;
 	(*v).len = 0;
-}
-
-static int	is_nl_end(char **s)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (s[i + 1])
-		i++;
-	while (s[i][j])
-		j++;
-	if (s[i][j - 1] == '\n')
-		return (1);
-	return (0);
 }
 
 void	nl_convert(char ***s)
@@ -106,10 +78,7 @@ int	ft_echo(char **cmd)
 			v.k++;
 		}
 	}
-	if (v.f && !is_nl_end(cmd))
-		write(1, "%%", 1);
-	if (v.f && is_nl_end(cmd))
-		return (1);
-	write(1, "\n", 1);
+	if (!v.f)
+		write(1, "\n", 1);
 	return (1);
 }

@@ -16,8 +16,9 @@ EXE			=	exec/handle_bin.c\
 
 BIN			=	builtins/echo.c \
 				builtins/cd.c \
-				builtins/export_unset.c \
-				builtins/pwd_env.c \
+				builtins/export.c \
+				builtins/unset.c \
+				builtins/pwd_env_exit.c \
 				builtins/utils.c 
 				
 LIBFT		= ./libft/

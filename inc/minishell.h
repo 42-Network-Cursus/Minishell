@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/31 16:39:37 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:58:50 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define REDIR_OUT 3
 # define SPACE 4
 
-int	ges;
+int *ges;
 
 typedef struct s_err_msg
 {
@@ -113,6 +113,7 @@ t_here	*ft_lstnew_2(void *content);
 void	ft_lstadd_back_2(t_here **lst, t_here *new);
 t_here	*ft_lstlast_2(t_here *lst);
 char	*ft_getenv(char *str, char **env);
+char	*ft_itoa2(int n);
 
 // check_env_var.c
 

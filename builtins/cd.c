@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:27 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 19:16:43 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 15:43:25 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ static char	*dot_dot(char *buf, char *ret)
 	i = ft_strlen(buf);
 	while (buf[i] != '/')
 		i--;
-	ret = malloc(sizeof(char) * i + 1);
+	if (i == 0)
+		i = 1;
+	ret = malloc(sizeof(char) * (i + 1));
 	if (!ret)
 		return (exit(0), "0");
 	while (j < i)

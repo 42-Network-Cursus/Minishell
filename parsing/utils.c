@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:56:08 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/28 15:45:26 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:59:40 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "../libft/libft.h"
 
 int	ft_strncmp_2(const char *s1, const char *s2, size_t n)
 {
@@ -235,4 +236,49 @@ char	*ft_getenv(char *str, char **env)
 		i++;
 	}
 	return (NULL);
+}
+
+static size_t	n_len(int n)
+{
+	size_t	i;
+
+	i = 0;
+	if (n < 0)
+		i++;
+	while (n)
+	{
+		n /= 10;
+		i++;
+	}
+	if (i == 0)
+		i++;
+	return (i);
+}
+
+char	*ft_itoa2(int n)
+{
+	size_t	i;
+	char	*str;
+
+	if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
+	i = n_len(n);
+	str = malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (NULL);
+	if (n == 0)
+		str[0] = '0';
+	str[i--] = '\0';
+	if (n < 0)
+	{
+		str[0] = '-';
+		n *= -1;
+	}
+	while (n)
+	{
+		str[i] = n % 10 + 48;
+		n /= 10;
+		i--;
+	}
+	return (*ges = 0, str);
 }

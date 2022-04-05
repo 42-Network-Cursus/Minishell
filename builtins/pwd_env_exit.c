@@ -1,18 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd_env.c                                          :+:      :+:    :+:   */
+/*   pwd_env_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:25 by mtournay          #+#    #+#             */
-/*   Updated: 2022/03/31 16:31:42 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/04 16:43:15 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
+
+static int	ft_isnum(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] < 48 || s[i] > 57)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_exit(char **cmd)
+{
+	if (cmd[1])
+	{
+		if (ft_isnum(cmd[1]))
+			error_mess("minishell: exit: ", cmd[1],
+				": numeric argument required", 1);
+	}
+	write(1, "exit\n", 5);
+	return (exit(0), 1);
+}
 
 void	get_cd(char **buf)
 {

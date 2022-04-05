@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:47:50 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/02 16:49:27 by cwastche         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:17:44 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,45 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 	{
 		p->f_in = open(red_inf, shell->cmds[i].redir_in.flags);
 		if (p->f_in < 0)
-			ft_exec_error("Open"); //TO REPLACE
+			error_mess("minishell: ", shell->cmds[i].redir_in.file_name, ": No such file or directory", 1);
 	}	
 	if (red_outf)
 	{
 		p->f_out = open(red_outf, shell->cmds[i].redir_out.flags);
 		if (p->f_out < 0)
-			ft_exec_error("Open"); //TO REPLACE
+			error_mess("minishell: ", shell->cmds[i].redir_out.file_name,  ": No such file or directory", 1);
 	}
 		
 }
 
 void	close_pipe(int *end)
 {
-	close(end[0]); //ADD ERROR HANDLER ?
-	close(end[1]); //ADD ERROR HANDLER ?
+	int	ret;
+
+	ret = close(end[0]);
+	if(ret == -1)
+	{
+		error_mess("minishell: ", "failed to close pipe", NULL, 1);
+		exit(1);
+	}
+	ret = close(end[1]);
+	if(ret == -1)
+	{
+		error_mess("minishell: ", "failed to close pipe", NULL, 1);
+		exit(1);
+	}
+}
+
+void	my_dup(int a, int b)
+{
+	int ret;
+
+	ret = dup2(a, b);
+	if(ret == -1)
+	{
+		error_mess("minishell: ", "failed to redirect output", NULL, 1);
+		exit(1);
+	}
 }
 
 void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
@@ -86,17 +110,17 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 
 	check_in_out_redir(shell, p, i);
 	if (p->f_out != 1)
-		dup2(p->f_out, 1); //CHECK ERROR 
+		my_dup(p->f_out, 1);
 	if (p->f_in != 0)
-		dup2(p->f_in, 0); //CHECK ERROR
+		my_dup(p->f_in, 0);
 	if (i > 0)
 	{
-		dup2(p->old_end[0], p->f_in); // check error
+		my_dup(p->old_end[0], p->f_in);
 		close_pipe(p->old_end);
 	}
 	if (i + 1 < shell->nb_cmd)
 	{
-		dup2(p->new_end[1], p->f_out); //check error
+		my_dup(p->new_end[1], p->f_out);
 		close_pipe(p->new_end);
 	}
 	ret = ft_bin(&(shell->env), shell->cmds[i].av, *p);

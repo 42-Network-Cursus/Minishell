@@ -6,11 +6,12 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:13:21 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/28 16:44:28 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:57:06 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "../libft/libft.h"
 
 static char	*delete_macro(char *str, int macro_len, int strlen)
 {
@@ -69,24 +70,24 @@ static char	*get_env_var(char *str, int strlen, int i, t_mini *shell)
 {
 	int		macro_len;
 	char	*macro;
-	int		var_len;
 	char	*var;
 	char	*new;
 
 	macro_len = 0;
-	var_len = 0;
 	while (str[i++] != '$')
 		;
 	while (!is_space_quotes(str[i + macro_len]) && str[i + macro_len])
 		macro_len++;
 	macro = ft_substr_2(str, i, macro_len);
-	var = ft_getenv(macro, shell->env);
+	if (str[i] == '?')
+		var = ft_itoa2(*ges);
+	else
+		var = ft_getenv(macro, shell->env);
 	if (!var)
 		return (delete_macro(str, macro_len, strlen));
 	else
 	{
-		var_len = ft_strlen_2(var);
-		new = malloc(sizeof(char) * (strlen + var_len - macro_len));
+		new = malloc(sizeof(char) * (strlen + ft_strlen_2(var) - macro_len));
 		if (!new)
 			exit(1);
 		replace_env_var(str, new, var, macro_len);
@@ -107,9 +108,7 @@ int	check_env_var(t_token *t, t_mini *shell, int i)
 			if (t->data[i] == '\'' && ++i)
 				while (t->data[i] != '\'' && t->data[i])
 					i++;
-			if (t->data[i] == '$' && t->data[i] && t->data[i + 1] != '\"'
-				&& t->data [i + 1] != '\'' && t->data[i + 1] != ' '
-				&& t->data[i + 1] != '?')
+			if (t->data[i] == '$' && t->data[i] && t->data[i + 1] != ' ')
 				t->data = get_env_var(t->data, ft_strlen_2(t->data), 0, shell);
 			if (t->data == NULL)
 				return (0);

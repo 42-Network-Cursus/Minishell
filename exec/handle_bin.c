@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   handle_bin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 11:47:25 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/02 16:49:37 by cwastche         ###   ########.fr       */
+/*   Updated: 2022/04/05 16:48:43 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 	if (!ncmp(cmd[0], "unset", 5))
 		return (ft_unset(env, cmd));
 	if (!ncmp(cmd[0], "exit", 4))
-	{
-		write(1, "exit\n", 5);
-		return (exit(0), 1);
-	}
+		return (ft_exit(cmd));
 	return (0);
 }
 
@@ -64,10 +61,7 @@ int	ft_bin(char ***env, char **cmd, t_pipes p)
 	if (!ncmp(cmd[0], "env", 3))
 		return (ft_env(*env, cmd, p));
 	if (!ncmp(cmd[0], "exit", 4))
-	{
-		write(1, "exit\n", 5);
-		return (exit(0), 1);
-	}
+		return (ft_exit(cmd));
 	return (8);
 }
 
