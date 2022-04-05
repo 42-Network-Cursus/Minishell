@@ -16,29 +16,28 @@
 
 void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 {
-	char	*redir_in;
-	char	*redir_out;
+	char	*r_in;
+	char	*r_out;
 
 	p->f_in = 0;
 	p->f_out = 1;
 	if (shell->cmds[i].redir_in.doc)
 		p->f_in = open_heredoc(shell->cmds[i].redir_in.doc);
-	redir_in = shell->cmds[i].redir_in.file_name;
-	redir_out = shell->cmds[i].redir_out.file_name;
-	if (redir_in)
+	r_in = shell->cmds[i].redir_in.file_name;
+	r_out = shell->cmds[i].redir_out.file_name;
+	if (r_in)
 	{
-		p->f_in = open(redir_in, shell->cmds[i].redir_in.flags);
+		p->f_in = open(r_in, shell->cmds[i].redir_in.flags);
 		if (p->f_in < 0)
-			error_mess("minishell: ", redir_in, ": No such file or directory", 1);
+			error_mess("minishell: ", r_in, ": No such file or directory", 1);
 	}	
-	if (redir_out)
+	if (r_out)
 	{
-		p->f_out = open(redir_out, shell->cmds[i].redir_out.flags);
+		p->f_out = open(r_out, shell->cmds[i].redir_out.flags);
 		if (p->f_out < 0)
-			error_mess("minishell: ", redir_out, ": No such file or directory", 1);
+			error_mess("minishell: ", r_out, ": No such file or directory", 1);
 	}
 }
-
 
 void	dup_and_close_pipe(int end, int fd, int *ends)
 {
@@ -49,6 +48,7 @@ void	dup_and_close_pipe(int end, int fd, int *ends)
 void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 {
 	int		ret;
+	char	*cmd;
 
 	check_in_out_redir(shell, p, i);
 	if (p->f_out != 1)
@@ -58,10 +58,7 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 	if (i > 0)
 		dup_and_close_pipe(p->old_end[0], p->f_in, p->old_end);
 	if (i + 1 < shell->nb_cmd)
-	{
-		my_dup(p->new_end[1], p->f_out);
-		close_pipe(p->new_end);
-	}
+		dup_and_close_pipe(p->new_end[1], p->f_out, p->new_end);
 	ret = ft_bin(&(shell->env), shell->cmds[i].av, *p);
 	if (ret == 1)
 		exit(0);
@@ -70,7 +67,8 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 		ret = execve(cmd_path, shell->cmds[i].av, shell->env);
 		if (ret == -1)
 		{
-			error_mess("Minishell: ", shell->cmds[i].av[0], ": command not found", 127);
+			cmd = shell->cmds[i].av[0];
+			error_mess("Minishell: ", cmd, ": command not found", 127);
 			exit(2);
 		}
 	}
@@ -103,7 +101,7 @@ void	ft_exec_cmd(t_mini *shell)
 		if (!bin_normalise(shell->cmds[0].av))
 			return ;
 		else
-			if (ft_bin_solo(shell->cmds[0].av, &shell->env, shell->cmds[0].redir_in.doc) == 1)
+			if (ft_bin_solo(shell->cmds[0].av, &shell->env, shell->cmds[0].r_in.doc) == 1)
 				return ;
 	}
 	i = -1;
@@ -111,7 +109,7 @@ void	ft_exec_cmd(t_mini *shell)
 	{
 		if (i < shell->nb_cmd - 1)
 			pipe(p.new_end);
-		if (shell->cmds[i].redir_in.doc)
+		if (shell->cmds[i].r_in.doc)
 			signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler2);
 		pid = fork();
@@ -119,7 +117,7 @@ void	ft_exec_cmd(t_mini *shell)
 			error_mess(NULL, "Error forking", NULL, 10);
 		else if (pid == 0)
 		{
-			if (!shell->cmds[i].redir_in.doc)
+			if (!shell->cmds[i].r_in.doc)
 				signal(SIGQUIT, signal_handler2);
 			if (bin_normalise(&shell->cmds[i].av[0]))
 			{
