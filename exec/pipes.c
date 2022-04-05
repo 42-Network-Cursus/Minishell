@@ -16,27 +16,34 @@
 
 void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 {
-	char	*red_inf;
-	char	*red_outf;
+	char	*redir_in;
+	char	*redir_out;
 
 	p->f_in = 0;
 	p->f_out = 1;
 	if (shell->cmds[i].redir_in.doc)
 		p->f_in = open_heredoc(shell->cmds[i].redir_in.doc);
-	red_inf = shell->cmds[i].redir_in.file_name;
-	red_outf = shell->cmds[i].redir_out.file_name;
-	if (red_inf)
+	redir_in = shell->cmds[i].redir_in.file_name;
+	redir_out = shell->cmds[i].redir_out.file_name;
+	if (redir_in)
 	{
-		p->f_in = open(red_inf, shell->cmds[i].redir_in.flags);
+		p->f_in = open(redir_in, shell->cmds[i].redir_in.flags);
 		if (p->f_in < 0)
-			error_mess("minishell: ", shell->cmds[i].redir_in.file_name, ": No such file or directory", 1);
+			error_mess("minishell: ", redir_in, ": No such file or directory", 1);
 	}	
-	if (red_outf)
+	if (redir_out)
 	{
-		p->f_out = open(red_outf, shell->cmds[i].redir_out.flags);
+		p->f_out = open(redir_out, shell->cmds[i].redir_out.flags);
 		if (p->f_out < 0)
-			error_mess("minishell: ", shell->cmds[i].redir_out.file_name, ": No such file or directory", 1);
+			error_mess("minishell: ", redir_out, ": No such file or directory", 1);
 	}
+}
+
+
+void	dup_&&_close_pipe(int end, int fd, int *ends)
+{
+		my_dup(end, fd);
+		close_pipe(ends);
 }
 
 void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
@@ -49,10 +56,7 @@ void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 	if (p->f_in != 0)
 		my_dup(p->f_in, 0);
 	if (i > 0)
-	{
-		my_dup(p->old_end[0], p->f_in);
-		close_pipe(p->old_end);
-	}
+		dup_&&_close_pipe(p->old_end[0], p->f_in, p->old_end);
 	if (i + 1 < shell->nb_cmd)
 	{
 		my_dup(p->new_end[1], p->f_out);
