@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_env_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:25 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 18:51:41 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:33:30 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	ft_env(char **env, char **cmd, t_pipes p)
 	int	i;
 	int	len;
 
-	(void)p;
 	if (cmd[1])
 	{
 		write(2, "env: ", 5);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 13:08:29 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/06 17:07:03 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:33:29 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ static	int	var_check_replace(char ***env, char *cmd, int var_len)
 	j = 0;
 	while ((*env)[i])
 	{
-		printf("index = %d\n", i);
-		// printf("%s\n", (*env)[i]);
 		if (comp((*env)[i], cmd, var_len))
 		{
 			j = 1;
@@ -47,9 +45,8 @@ static	int	var_check_replace(char ***env, char *cmd, int var_len)
 	}
 	if (!j)
 		return (1);
-	free((*env)[i]);
+	//free((*env)[i]);
 	(*env)[i] = ft_strdup(cmd);
-	// printf("la bas %s\n", (*env)[i]);
 	if (!(*env)[i])
 		exit(0);
 	return (0);
@@ -96,32 +93,33 @@ int	ft_export(char ***env, char **cmd)
 	int		j;
 	int		k;
 
-	i = 0;
 	k = 0;
-	j = -1;
 	while (cmd[++k])
 	{
+		i = 0;
+		j = -1;
 		if (!export_check(cmd[k]))
 			continue ;
 		if (!var_check_replace(env, cmd[k], export_check(cmd[k])))
 			continue ;
-		// printf("ici [%s]\n", cmd[k]);
 		while ((*env)[i])
 			i++;
 		ret = malloc(sizeof(char *) * (i + 2));
 		if (!ret)
 			return (exit(0), 1);
-		printf("i = %d\n", i);
 		while (++j < i)
+		{
 			ret[j] = ft_strdup((*env)[j]);
+			if (!ret[j])
+				return (exit(0), 1);
+			free((*env)[j]);
+		}
 		ret[i] = ft_strdup(cmd[k]);
 		if (!ret[i])
 			return (exit(0), 1);
 		i++;
 		ret[i] = NULL;
-		j = 0;
-		while (j < i)
-			free((*env[j]));
+		free(*env);
 		*env = ret;
 	}
 	return (1);

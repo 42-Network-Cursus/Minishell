@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_bin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 11:47:25 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 16:48:43 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/06 17:33:31 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ void	ft_minimize(char ***cmd)
 
 int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 {
+	t_pipes p;
+
+	p.f_in = 0;
+	p.f_out = 1;
 	ft_minimize(&cmd);
 	if (ft_bin_heredoc(cmd))
 	{
@@ -42,6 +46,8 @@ int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 		return (ft_unset(env, cmd));
 	if (!ncmp(cmd[0], "exit", 4))
 		return (ft_exit(cmd));
+	if (!ncmp(cmd[0], "env", 3))
+		return (ft_env(*env, cmd, p));
 	return (0);
 }
 
