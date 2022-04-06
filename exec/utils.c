@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 19:14:27 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 19:14:38 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/06 14:34:54 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	my_dup(int a, int b)
 	ret = dup2(a, b);
 	if (ret == -1)
 	{
-		error_mess("minishell: ", "failed to redirect output", NULL, 1);
+		error_mess("minishell: ", "dup failed", NULL, 1);
 		exit(1);
 	}
 }
