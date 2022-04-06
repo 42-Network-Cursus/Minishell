@@ -45,7 +45,7 @@ static	int	var_check_replace(char ***env, char *cmd, int var_len)
 	}
 	if (!j)
 		return (1);
-	free((*env)[i]);
+	//free((*env)[i]);
 	(*env)[i] = ft_strdup(cmd);
 	if (!(*env)[i])
 		exit(0);
@@ -60,7 +60,7 @@ static	int	export_check(char *cmd)
 	if (!ft_isalpha(cmd[i]))
 	{
 		error_mess("minishell: export: ",
-			cmd, ": not a valid indentifier", 1);
+				cmd, ": not a valid indentifier", 1);
 		return (0);
 	}
 	while (cmd[i])
@@ -83,26 +83,35 @@ static	int	export_check(char *cmd)
 int	ft_export(char ***env, char **cmd)
 {
 	char	**ret;
-	t_count	c;
+	int		i;
+	int		j;
+	int		k;
 
-	c.k = 0;
-	while (cmd[++c.k])
+	k = 0;
+	while (cmd[++k])
 	{
-		count_val(&c);
-		if (!export_check(cmd[c.k])
-			|| !var_check_replace(env, cmd[c.k], export_check(cmd[c.k])))
+		i = 0;
+		j = -1;
+		if (!export_check(cmd[k]))
 			continue ;
-		while ((*env)[c.i])
-			c.i++;
-		ret = malloc(sizeof(char *) * (c.i + 2));
-		if (!ret)
+		if (!var_check_replace(env, cmd[k], export_check(cmd[k])))
+			continue ;
+		while ((*env)[i])
+			i++;
+		if (!ret = malloc(sizeof(char *) * (i + 2))
 			return (exit(0), 1);
-		while (++c.j < c.i)
-			realloc_env(c.j, ret, *env);
-		ret[c.i] = ft_strdup(cmd[c.k]);
-		if (!ret)
+		while (++j < i)
+		{
+			ret[j] = ft_strdup((*env)[j]);
+			if (!ret[j])
+				return (exit(0), 1);
+			free((*env)[j]);
+		}
+		ret[i] = ft_strdup(cmd[k]);
+		if (!ret[i])
 			return (exit(0), 1);
-		ret[++c.i] = NULL;
+		i++;
+		ret[i] = NULL;
 		free(*env);
 		*env = ret;
 	}

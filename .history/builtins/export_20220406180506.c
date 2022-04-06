@@ -80,13 +80,15 @@ static	int	export_check(char *cmd)
 	return (i);
 }
 
+
+
 int	ft_export(char ***env, char **cmd)
 {
 	char	**ret;
 	t_count	c;
 
 	c.k = 0;
-	while (cmd[++c.k])
+	while (cmd[++k])
 	{
 		count_val(&c);
 		if (!export_check(cmd[c.k])

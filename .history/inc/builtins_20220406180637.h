@@ -52,6 +52,5 @@ int		bin_cmd(char ***env, char **cmd);
 
 char	*cat_dup(char *dst, char *src);
 void	realloc_env(int j, char **ret, char **env);
-void	count_val(t_count *c);
 
 #endif

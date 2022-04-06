@@ -80,13 +80,27 @@ static	int	export_check(char *cmd)
 	return (i);
 }
 
+void	realloc_env(int j, char **ret, char **env)
+{
+	ret[j] = ft_strdup(env[j]);
+	if (!ret)
+		exit(0);
+	free(env[j]);
+}
+
+void	count_val(t_count *c)
+{
+	c->i = 0;
+	c->j = -1;
+}
+
 int	ft_export(char ***env, char **cmd)
 {
 	char	**ret;
 	t_count	c;
 
 	c.k = 0;
-	while (cmd[++c.k])
+	while (cmd[++k])
 	{
 		count_val(&c);
 		if (!export_check(cmd[c.k])

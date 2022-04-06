@@ -80,29 +80,39 @@ static	int	export_check(char *cmd)
 	return (i);
 }
 
+void	realloc_env(int j, char **ret, char **env)
+{
+	ret[j] = ft_strdup(env[j]);
+	if (!ret)
+		exit(0);
+	free(env[j]);
+}
+
 int	ft_export(char ***env, char **cmd)
 {
 	char	**ret;
 	t_count	c;
 
 	c.k = 0;
-	while (cmd[++c.k])
+	while (cmd[++k])
 	{
-		count_val(&c);
-		if (!export_check(cmd[c.k])
-			|| !var_check_replace(env, cmd[c.k], export_check(cmd[c.k])))
+		assign_
+		i = 0;
+		j = -1;
+		if (!export_check(cmd[k])
+			|| !var_check_replace(env, cmd[k], export_check(cmd[k])))
 			continue ;
-		while ((*env)[c.i])
-			c.i++;
-		ret = malloc(sizeof(char *) * (c.i + 2));
+		while ((*env)[i])
+			i++;
+		ret = malloc(sizeof(char *) * (i + 2));
 		if (!ret)
 			return (exit(0), 1);
-		while (++c.j < c.i)
-			realloc_env(c.j, ret, *env);
-		ret[c.i] = ft_strdup(cmd[c.k]);
+		while (++j < i)
+			realloc_env(j, ret, *env);
+		ret[i] = ft_strdup(cmd[k]);
 		if (!ret)
 			return (exit(0), 1);
-		ret[++c.i] = NULL;
+		ret[++i] = NULL;
 		free(*env);
 		*env = ret;
 	}

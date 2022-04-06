@@ -27,11 +27,8 @@
 
 typedef struct s_count
 {
-	int		i;
-	int		j;
-	int		k;
-}				t_count;
-
+	
+}
 void	get_cd(char **buf);
 int		ft_pwd(char **cmd, t_pipes p);
 int		ft_cd(char **cmd);
@@ -51,7 +48,5 @@ int		error_mess(char *s, char *mess, char *cmd, int exstat);
 int		bin_cmd(char ***env, char **cmd);
 
 char	*cat_dup(char *dst, char *src);
-void	realloc_env(int j, char **ret, char **env);
-void	count_val(t_count *c);
 
 #endif

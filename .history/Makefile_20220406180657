@@ -19,7 +19,7 @@ EXE			=	exec/handle_bin.c\
 BIN			=	builtins/echo.c \
 				builtins/cd.c \
 				builtins/export.c \
-				builtins/export_utils.c \
+				builtins/export.c \
 				builtins/unset.c \
 				builtins/pwd_env_exit.c \
 				builtins/utils.c \

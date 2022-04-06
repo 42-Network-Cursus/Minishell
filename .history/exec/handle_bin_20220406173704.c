@@ -28,7 +28,7 @@ void	ft_minimize(char ***cmd)
 
 int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 {
-	t_pipes	p;
+	t_pipes p;
 
 	p.f_in = 0;
 	p.f_out = 1;

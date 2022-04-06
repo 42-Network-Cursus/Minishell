@@ -83,26 +83,33 @@ static	int	export_check(char *cmd)
 int	ft_export(char ***env, char **cmd)
 {
 	char	**ret;
-	t_count	c;
+	int		i;
+	int		j;
+	int		k;
 
-	c.k = 0;
-	while (cmd[++c.k])
+	k = 0;
+	while (cmd[++k])
 	{
-		count_val(&c);
-		if (!export_check(cmd[c.k])
-			|| !var_check_replace(env, cmd[c.k], export_check(cmd[c.k])))
+		i = 0;
+		j = -1;
+		if (!export_check(cmd[k]))
 			continue ;
-		while ((*env)[c.i])
-			c.i++;
-		ret = malloc(sizeof(char *) * (c.i + 2));
-		if (!ret)
+		if (!var_check_replace(env, cmd[k], export_check(cmd[k])))
+			continue ;
+		while ((*env)[i])
+			i++;
+		ret = malloc(sizeof(char *) * (i + 2));
 			return (exit(0), 1);
-		while (++c.j < c.i)
-			realloc_env(c.j, ret, *env);
-		ret[c.i] = ft_strdup(cmd[c.k]);
-		if (!ret)
+		while (++j < i)
+		{
+			if (!(ret[j] = ft_strdup((*env)[j])))
+				return (exit(0), 1);
+			free((*env)[j]);
+		}
+		if (!(ret[i] = ft_strdup(cmd[k])))
 			return (exit(0), 1);
-		ret[++c.i] = NULL;
+		i++;
+		ret[i] = NULL;
 		free(*env);
 		*env = ret;
 	}
