@@ -113,7 +113,7 @@ int		check_env_var(t_token *token, t_mini *shell, int i);
 int		exe(t_mini *shell);
 int		smlp(char c, int *macro_len);
 
-
 // main.c
+
 void	signal_handler(int signum);
 #endif

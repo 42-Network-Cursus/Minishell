@@ -34,7 +34,7 @@ int		ft_export(char ***env, char **cmd);
 int		ft_env(char **env, char **cmd, t_pipes p);
 int		ft_exit(char **cmd);
 
-int		cmp(char *s1, char *s2, int);
+int		cmp(char *s1, char *s2, int n);
 int		ncmp(char *s1, char *s2, size_t n);
 void	nl_convert(char ***s);
 void	nl_convert_process(char **s);

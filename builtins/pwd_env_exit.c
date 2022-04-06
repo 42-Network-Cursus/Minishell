@@ -61,14 +61,8 @@ void	get_cd(char **buf)
 int	ft_pwd(char **cmd, t_pipes p)
 {
 	char	*buf;
-//	int		i;
 
 	(void)cmd;
-//	i = 0;
-//	while (cmd[i])
-//		i++;
-//	if (i > 1)
-//		return (error_mess(NULL, cmd[0], ": too many arguments", 1));
 	get_cd(&buf);
 	write(p.f_out, buf, ft_strlen(buf));
 	write(p.f_out, "\n", 1);
