@@ -39,12 +39,6 @@ void	check_in_out_redir(t_mini *shell, t_pipes *p, int i)
 	}
 }
 
-void	dup_and_close_pipe(int end, int fd, int *ends)
-{
-	my_dup(end, fd);
-	close_pipe(ends);
-}
-
 void	child_process(t_mini *shell, t_pipes *p, int i, char *cmd_path)
 {
 	int		ret;
@@ -89,46 +83,50 @@ void	parent_process(t_mini *shell, t_pipes *p, int i, pid_t pid)
 	waitpid(pid, NULL, 0);
 }
 
+void	ft_fork(t_mini *shell, t_pipes *p, int i)
+{
+	char	*cmd_path;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		error_mess(NULL, "Error forking", NULL, 10);
+	else if (pid == 0)
+	{
+		if (!shell->cmds[i].redir_in.doc)
+			signal(SIGQUIT, SIG_DFL);
+		if (bin_normalise(&shell->cmds[i].av[0]))
+		{
+			cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
+			child_process(shell, p, i, cmd_path);
+		}
+		exit(0);
+	}
+	else
+		parent_process(shell, p, i, pid);
+}
+
 void	ft_exec_cmd(t_mini *shell)
 {
 	int		i;
-	pid_t	pid;
 	t_pipes	p;
-	char	*cmd_path;
 
-	if (shell->nb_cmd == 1)
-	{
-		if (!bin_normalise(shell->cmds[0].av))
-			return ;
-		else
-			if (ft_bin_solo(shell->cmds[0].av, &shell->env, shell->cmds[0].r_in.doc) == 1) //line too long
-				return ;
-	}
+	if (shell->nb_cmd == 1 && check_for_bin(shell))
+		return ;
 	i = -1;
 	while (++i < shell->nb_cmd)
 	{
 		if (i < shell->nb_cmd - 1)
-			pipe(p.new_end);
-		if (shell->cmds[i].r_in.doc)
+		{
+			if (pipe(p.new_end))
+			{
+				error_mess("minishell: ", "failed to create pipe", NULL, 1);
+				return ;
+			}
+		}
+		if (shell->cmds[i].redir_in.doc)
 			signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler2);
-		pid = fork();
-		if (pid == -1)
-			error_mess(NULL, "Error forking", NULL, 10);
-		else if (pid == 0)
-		{
-			if (!shell->cmds[i].r_in.doc)
-				signal(SIGQUIT, signal_handler2);
-			if (bin_normalise(&shell->cmds[i].av[0]))
-			{
-				cmd_path = ft_cmd_path(shell->env, shell->cmds[i].av[0]);
-				child_process(shell, &p, i, cmd_path);
-			}
-			exit(0);
-		}
-		else
-			parent_process(shell, &p, i, pid);
+		ft_fork(shell, &p, i);
 	}
-	if (shell->nb_cmd > 1)
-		close_pipe(p.old_end);
 }

@@ -33,6 +33,12 @@ typedef struct s_pipes
 	int		f_out;
 }				t_pipes;
 
+typedef struct s_doc_fd
+{
+	int		fd;
+	char	*input;
+}				t_doc_fd;
+
 char	*ft_cmd_path(char **env, char *cmd);
 int		ft_execute(char **cmd, char **envp);
 void	ft_exec_error(char *str);
@@ -55,6 +61,8 @@ void	my_dup(int a, int b);
 void	close_pipe(int *end);
 char	*ft_cmd_path(char **env, char *cmd);
 
-int		handle_found_delim(t_here *doc, char *input, int fd);
+int		handle_found_delim(t_here *doc, t_doc_fd *t_doc);
+int		check_for_bin(t_mini *shell);
+void	dup_and_close_pipe(int end, int fd, int *ends);
 
 #endif

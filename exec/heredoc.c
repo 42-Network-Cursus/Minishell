@@ -64,48 +64,57 @@ int	delim_is_input(char *input, char *delimiter)
 	return (0);
 }
 
-int	handle_found_delim(t_here *doc, char *input, int fd)
+int	handle_found_delim(t_here *doc, t_doc_fd *t_doc)
 {
+	char	*msg;
+
+	msg = ": No such file or directory";
 	if (doc->next == NULL)
 	{
-		free(input);
-		close(fd);
-		fd = open("heredoc", O_RDONLY, 0666);
+		free(t_doc->input);
+		close(t_doc->fd);
+		t_doc->fd = open("heredoc", O_RDONLY, 0666);
+		if (t_doc->fd < 0)
+			error_mess("minishell: ", "heredoc", msg, 1);
 		if (unlink("heredoc"))
 			unlink_error();
-		return (fd);
+		return (1);
 	}
 	else
 	{
 		doc = doc->next;
-		close(fd);
-		fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
+		close(t_doc->fd);
+		t_doc->fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
+		if (t_doc->fd < 0)
+			error_mess("minishell: ", "heredoc", msg, 1);
 	}
 	return (0);
 }
 
 int	open_heredoc(t_here *doc)
 {
-	int		fd;
-	char	*input;
+	t_doc_fd	t_doc;
 
-	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
+	t_doc.fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
 	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
-		input = readline(">");
-		if (!input)
+		t_doc.input = readline(">");
+		if (!t_doc.input)
 		{
 			if (unlink("heredoc"))
 				unlink_error();
-			close(fd);
+			close(t_doc.fd);
 			exit(0);
 		}
-		if (*input && delim_is_input(input, doc->delimiter))
-			fd = handle_found_delim(doc, input, fd);
+		if (*t_doc.input && delim_is_input(t_doc.input, doc->delimiter))
+		{
+			if (handle_found_delim(doc, &t_doc))
+				return (t_doc.fd);
+		}
 		else
-			ft_putendl_fd(input, fd);
-		free(input);
+			ft_putendl_fd(t_doc.input, t_doc.fd);
+		free(t_doc.input);
 	}
 	return (0);
 }

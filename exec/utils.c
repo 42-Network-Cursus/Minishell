@@ -50,12 +50,14 @@ void	close_pipe(int *end)
 	ret = close(end[0]);
 	if (ret == -1)
 	{
+		perror("close");
 		error_mess("minishell: ", "failed to close pipe", NULL, 1);
 		exit(1);
 	}
 	ret = close(end[1]);
 	if (ret == -1)
 	{
+		perror("close");
 		error_mess("minishell: ", "failed to close pipe", NULL, 1);
 		exit(1);
 	}
