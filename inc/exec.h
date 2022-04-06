@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 19:09:45 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 19:13:56 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/04/06 14:59:58 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	my_dup(int a, int b);
 void	close_pipe(int *end);
 char	*ft_cmd_path(char **env, char *cmd);
 
-int		handle_found_delim(t_here *doc, t_doc_fd *t_doc);
+int		handle_found_delim(t_here **doc, char *input, int *fd);
 int		check_for_bin(t_mini *shell);
 void	dup_and_close_pipe(int end, int fd, int *ends);
 
