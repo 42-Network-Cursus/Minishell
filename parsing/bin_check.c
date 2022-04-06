@@ -47,7 +47,7 @@ int	bin_normalise(char **str)
 			len = ft_strlen((str)[0]);
 			while ((*str)[len] != '/')
 				len--;
-			if (!dup_from(str, len))
+			if (!dup_from(str, ++len))
 				return (1);
 		}
 		else

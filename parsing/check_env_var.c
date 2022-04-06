@@ -70,7 +70,6 @@ static void	replace_env_var(char *str, char *new, char *var, int macro_len)
 static char	*get_env_var(char *str, int strlen, int i, t_mini *shell)
 {
 	int		macro_len;
-	char	*macro;
 	char	*var;
 	char	*new;
 
@@ -79,11 +78,10 @@ static char	*get_env_var(char *str, int strlen, int i, t_mini *shell)
 		;
 	while (!is_space_quotes(str[i + macro_len]) && str[i + macro_len])
 		macro_len++;
-	macro = ft_substr_2(str, i, macro_len);
-	if (str[i] == '?')
+	if (smlp(str[i], &macro_len))
 		var = ft_itoa2(g_es);
 	else
-		var = ft_getenv(macro, shell->env);
+		var = ft_getenv(ft_substr_2(str, i, macro_len), shell->env);
 	if (!var)
 		return (delete_macro(str, macro_len, strlen));
 	else

@@ -79,7 +79,7 @@ static void	shell_loop(t_mini *shell, char **input)
 		*input = ft_strtrim_2(*input, " ");
 		shell->nb_cmd = 0;
 		shell->cmds = NULL;
-		if (!parser(shell, input))
+		if (parser(shell, input))
 			continue ;
 		if (*input != 0 && !delim_is_input(*input, ""))
 		{

@@ -34,7 +34,7 @@ char	*ft_getenv(char *str, char **env)
 	len = ft_strlen_2(str);
 	while (env[i])
 	{
-		if (!ft_strncmp_2(str, env[i], len - 1))
+		if (!cmp(env[i], str, len + 1))
 			return (ft_substr_2(env[i], len + 1,
 					ft_strlen_2(env[i]) - (len + 1)));
 		i++;
@@ -59,11 +59,19 @@ static size_t	n_len(int n)
 	return (i);
 }
 
+static int	check_ges(int n)
+{
+	if (n == 256)
+		n = 1;
+	return (n);
+}
+
 char	*ft_itoa2(int n)
 {
 	size_t	i;
 	char	*str;
 
+	n = check_ges(n);
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
 	i = n_len(n);
@@ -84,6 +92,5 @@ char	*ft_itoa2(int n)
 		n /= 10;
 		i--;
 	}
-	g_es = 0 ;
 	return (g_es = 0, str);
 }

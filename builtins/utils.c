@@ -14,20 +14,22 @@
 #include "builtins.h"
 #include "exec.h"
 
-int	cmp(char *s1, char *s2)
+int	cmp(char *s1, char *s2, int n)
 {
-	int	i;
-
-	i = 0;
 	if (!s1 || !s2)
 		return (1);
-	while (s1[i] && s2[i])
+	while (n--)
 	{
-		if (s1[i] != s2[i])
+		if (*s1 != *s2 && !*s2 && *s1 == '=')
+			return (0);
+		if (*s1 != *s2)
+			return (*(unsigned char *)s1 - *(unsigned char *)s2);
+		if (!*s1)
 			return (1);
-		i++;
+		s1++;
+		s2++;
 	}
-	return (0);
+	return (1);
 }
 
 int	error_mess(char *s, char *mess, char *cmd, int exstat)

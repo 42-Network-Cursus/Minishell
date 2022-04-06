@@ -76,5 +76,5 @@ int	free_tokens(t_token **head)
 		free(*head);
 		*head = tmp;
 	}
-	return (1);
+	return (0);
 }

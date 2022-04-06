@@ -82,9 +82,9 @@ static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
 			if (head->type == OTHER)
 				cmds[i].av[j++] = ft_strdup_2(head->data);
 			else if (head->type == REDIR_IN && redir(&cmds[i].redir_in, head))
-				continue ;
+				;
 			else if (head->type == REDIR_OUT && redir(&cmds[i].redir_out, head))
-				continue ;
+				;
 			if (head->type == REDIR_IN || head->type == REDIR_OUT)
 				head = head->next;
 			if (head)

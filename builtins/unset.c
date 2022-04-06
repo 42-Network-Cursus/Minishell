@@ -46,7 +46,7 @@ int	ft_unset(char ***env, char **cmd)
 	if (!ret)
 		return (exit(0), 1);
 	i = 0;
-	while (cmp((*env)[i], cmd[1]) && (*env)[i])
+	while (cmp((*env)[i], cmd[1], ft_strlen(cmd[1])) && (*env)[i])
 	{
 		ret[i] = (*env)[i];
 		i++;
